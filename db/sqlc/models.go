@@ -2,41 +2,35 @@
 
 package db
 
-import (
-	"database/sql"
-)
+import ()
 
 type Blog struct {
-	ID       int32          `json:"id"`
-	Title    sql.NullString `json:"title"`
-	Content  sql.NullString `json:"content"`
-	Created  sql.NullTime   `json:"created"`
-	Updated  sql.NullTime   `json:"updated"`
-	AuthorID sql.NullInt32  `json:"author_id"`
+	ID       int64  `json:"id"`
+	Title    string `json:"title"`
+	Content  string `json:"content"`
+	AuthorID int32  `json:"author_id"`
 }
 
 type Category struct {
-	Title  string        `json:"title"`
-	BlogID sql.NullInt32 `json:"blog_id"`
+	Title  string `json:"title"`
+	BlogID int32  `json:"blog_id"`
 }
 
 type Tag struct {
-	Title  string        `json:"title"`
-	BlogID sql.NullInt32 `json:"blog_id"`
+	Title  string `json:"title"`
+	BlogID int32  `json:"blog_id"`
 }
 
 type User struct {
-	ID       int32          `json:"id"`
-	Username sql.NullString `json:"username"`
-	Password sql.NullString `json:"password"`
-	Role     sql.NullString `json:"role"`
-	Created  sql.NullTime   `json:"created"`
-	Updated  sql.NullTime   `json:"updated"`
+	ID       int64  `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
 }
 
 type UserComment struct {
-	ID     int32          `json:"id"`
-	BlogID sql.NullInt32  `json:"blog_id"`
-	UserID sql.NullInt32  `json:"user_id"`
-	Coment sql.NullString `json:"coment"`
+	ID     int64  `json:"id"`
+	BlogID int32  `json:"blog_id"`
+	UserID int32  `json:"user_id"`
+	Coment string `json:"coment"`
 }

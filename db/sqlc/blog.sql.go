@@ -5,44 +5,31 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createBlog = `-- name: CreateBlog :one
 INSERT INTO blog (
   title,
   content,
-  created,
-  updated,
   author_id
 ) VALUES (
-  $1, $2, $3, $4, $5
-) RETURNING id, title, content, created, updated, author_id
+  $1, $2, $3
+) RETURNING id, title, content, author_id
 `
 
 type CreateBlogParams struct {
-	Title    sql.NullString `json:"title"`
-	Content  sql.NullString `json:"content"`
-	Created  sql.NullTime   `json:"created"`
-	Updated  sql.NullTime   `json:"updated"`
-	AuthorID sql.NullInt32  `json:"author_id"`
+	Title    string `json:"title"`
+	Content  string `json:"content"`
+	AuthorID int32  `json:"author_id"`
 }
 
 func (q *Queries) CreateBlog(ctx context.Context, arg CreateBlogParams) (Blog, error) {
-	row := q.db.QueryRowContext(ctx, createBlog,
-		arg.Title,
-		arg.Content,
-		arg.Created,
-		arg.Updated,
-		arg.AuthorID,
-	)
+	row := q.db.QueryRowContext(ctx, createBlog, arg.Title, arg.Content, arg.AuthorID)
 	var i Blog
 	err := row.Scan(
 		&i.ID,
 		&i.Title,
 		&i.Content,
-		&i.Created,
-		&i.Updated,
 		&i.AuthorID,
 	)
 	return i, err
@@ -65,32 +52,30 @@ WHERE id = $1
 // SET title = $2,
 // WHERE id = $1
 // RETURNING *;
-func (q *Queries) DeleteBlog(ctx context.Context, id int32) error {
+func (q *Queries) DeleteBlog(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteBlog, id)
 	return err
 }
 
 const getBlog = `-- name: GetBlog :one
-SELECT id, title, content, created, updated, author_id FROM blog
+SELECT id, title, content, author_id FROM blog
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetBlog(ctx context.Context, id int32) (Blog, error) {
+func (q *Queries) GetBlog(ctx context.Context, id int64) (Blog, error) {
 	row := q.db.QueryRowContext(ctx, getBlog, id)
 	var i Blog
 	err := row.Scan(
 		&i.ID,
 		&i.Title,
 		&i.Content,
-		&i.Created,
-		&i.Updated,
 		&i.AuthorID,
 	)
 	return i, err
 }
 
 const listBlog = `-- name: ListBlog :many
-SELECT id, title, content, created, updated, author_id FROM blog
+SELECT id, title, content, author_id FROM blog
 ORDER BY TITLE
 `
 
@@ -107,8 +92,6 @@ func (q *Queries) ListBlog(ctx context.Context) ([]Blog, error) {
 			&i.ID,
 			&i.Title,
 			&i.Content,
-			&i.Created,
-			&i.Updated,
 			&i.AuthorID,
 		); err != nil {
 			return nil, err

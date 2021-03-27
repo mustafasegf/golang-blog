@@ -5,70 +5,55 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
   username,
   password,
-  role,
-  created,
-  updated
+  name
 ) VALUES (
-  $1, $2, $3, $4, $5
-) RETURNING id, username, password, role, created, updated
+  $1, $2, $3
+) RETURNING id, username, password, name
 `
 
 type CreateUserParams struct {
-	Username sql.NullString `json:"username"`
-	Password sql.NullString `json:"password"`
-	Role     sql.NullString `json:"role"`
-	Created  sql.NullTime   `json:"created"`
-	Updated  sql.NullTime   `json:"updated"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Name     string `json:"name"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser,
-		arg.Username,
-		arg.Password,
-		arg.Role,
-		arg.Created,
-		arg.Updated,
-	)
+	row := q.db.QueryRowContext(ctx, createUser, arg.Username, arg.Password, arg.Name)
 	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.Username,
 		&i.Password,
-		&i.Role,
-		&i.Created,
-		&i.Updated,
+		&i.Name,
 	)
 	return i, err
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, username, password, role, created, updated FROM users
-WHERE id = $1 LIMIT 1
+SELECT id, username, password, name FROM users
+WHERE username = $1 LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUser, id)
+func (q *Queries) GetUser(ctx context.Context, username string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUser, username)
 	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.Username,
 		&i.Password,
-		&i.Role,
-		&i.Created,
-		&i.Updated,
+		&i.Name,
 	)
 	return i, err
 }
 
 const listUser = `-- name: ListUser :many
-SELECT id, username, password, role, created, updated FROM users
+SELECT id, username, password, name FROM users
 ORDER BY name
 `
 
@@ -85,9 +70,7 @@ func (q *Queries) ListUser(ctx context.Context) ([]User, error) {
 			&i.ID,
 			&i.Username,
 			&i.Password,
-			&i.Role,
-			&i.Created,
-			&i.Updated,
+			&i.Name,
 		); err != nil {
 			return nil, err
 		}

@@ -2,11 +2,9 @@
 INSERT INTO blog (
   title,
   content,
-  created,
-  updated,
   author_id
 ) VALUES (
-  $1, $2, $3, $4, $5
+  $1, $2, $3
 ) RETURNING *;
 
 -- name: GetBlog :one

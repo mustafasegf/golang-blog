@@ -5,7 +5,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createComment = `-- name: CreateComment :one
@@ -19,9 +18,9 @@ INSERT INTO user_comment (
 `
 
 type CreateCommentParams struct {
-	BlogID sql.NullInt32  `json:"blog_id"`
-	UserID sql.NullInt32  `json:"user_id"`
-	Coment sql.NullString `json:"coment"`
+	BlogID int32  `json:"blog_id"`
+	UserID int32  `json:"user_id"`
+	Coment string `json:"coment"`
 }
 
 func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (UserComment, error) {
@@ -47,7 +46,7 @@ WHERE id = $1
 // SET content = $2,
 // WHERE id = $1
 // RETURNING *;
-func (q *Queries) DeleteComment(ctx context.Context, id int32) error {
+func (q *Queries) DeleteComment(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteComment, id)
 	return err
 }
@@ -57,7 +56,7 @@ SELECT id, blog_id, user_id, coment FROM user_comment
 WHERE blog_id = $1
 `
 
-func (q *Queries) ListComment(ctx context.Context, blogID sql.NullInt32) ([]UserComment, error) {
+func (q *Queries) ListComment(ctx context.Context, blogID int32) ([]UserComment, error) {
 	rows, err := q.db.QueryContext(ctx, listComment, blogID)
 	if err != nil {
 		return nil, err

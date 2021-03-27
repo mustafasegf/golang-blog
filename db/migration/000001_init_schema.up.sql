@@ -1,36 +1,32 @@
 CREATE TABLE "users" (
-  "id" SERIAL PRIMARY KEY,
-  "username" varchar,
-  "password" varchar,
-  "role" varchar,
-  "created" timestamp,
-  "updated" timestamp
+  "id" bigint PRIMARY KEY,
+  "username" varchar NOT NULL UNIQUE ,
+  "password" varchar NOT NULL,
+  "name" varchar NOT NULL
 );
 
 CREATE TABLE "blog" (
-  "id" SERIAL PRIMARY KEY,
-  "title" varchar,
-  "content" text,
-  "created" timestamp,
-  "updated" timestamp,
-  "author_id" int
+  "id" bigint PRIMARY KEY,
+  "title" varchar NOT NULL,
+  "content" text NOT NULL,
+  "author_id" int NOT NULL
 );
 
 CREATE TABLE "user_comment" (
-  "id" SERIAL PRIMARY KEY,
-  "blog_id" int,
-  "user_id" int,
-  "coment" text
+  "id" bigint PRIMARY KEY,
+  "blog_id" int NOT NULL,
+  "user_id" int NOT NULL,
+  "coment" text NOT NULL
 );
 
 CREATE TABLE "tags" (
   "title" varchar PRIMARY KEY,
-  "blog_id" int
+  "blog_id" int NOT NULL
 );
 
 CREATE TABLE "category" (
   "title" varchar PRIMARY KEY,
-  "blog_id" int
+  "blog_id" int NOT NULL
 );
 
 ALTER TABLE "blog" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
