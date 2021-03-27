@@ -23,4 +23,10 @@ migratedown:
 sqlc:
 	sqlc generate
 
-.PHONY: pullpostgres postgres removecontainer createdb dropdb migrateup migratedown sqlc
+build-nix:
+	go build -o ./bin main.go; ./bin/main
+
+buiid-win:
+	go build -o .\bin main.go; .\bin\main
+
+.PHONY: pullpostgres postgres removecontainer createdb dropdb migrateup migratedown sqlc build-nix buiid-win

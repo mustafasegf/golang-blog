@@ -12,11 +12,11 @@ CREATE TABLE "blog" (
   "author_id" int NOT NULL
 );
 
-CREATE TABLE "user_comment" (
+CREATE TABLE "comments" (
   "id" SERIAL  PRIMARY KEY,
   "blog_id" int NOT NULL,
   "user_id" int NOT NULL,
-  "coment" text NOT NULL
+  "comment" text NOT NULL
 );
 
 CREATE TABLE "tags" (

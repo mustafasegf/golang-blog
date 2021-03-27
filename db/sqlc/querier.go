@@ -8,14 +8,14 @@ import (
 
 type Querier interface {
 	CreateBlog(ctx context.Context, arg CreateBlogParams) (Blog, error)
-	CreateComment(ctx context.Context, arg CreateCommentParams) (UserComment, error)
+	CreateComment(ctx context.Context, arg CreateCommentParams) (Comment, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
-	DeleteBlog(ctx context.Context, id int64) error
-	DeleteComment(ctx context.Context, id int64) error
-	GetBlog(ctx context.Context, id int64) (Blog, error)
+	DeleteBlog(ctx context.Context, id int32) error
+	DeleteComment(ctx context.Context, id int32) error
+	GetBlog(ctx context.Context, id int32) (Blog, error)
+	GetComment(ctx context.Context, blogID int32) ([]Comment, error)
 	GetUser(ctx context.Context, username string) (User, error)
 	ListBlog(ctx context.Context) ([]Blog, error)
-	ListComment(ctx context.Context, blogID int32) ([]UserComment, error)
 	ListUser(ctx context.Context) ([]User, error)
 }
 

@@ -8,68 +8,62 @@ import (
 )
 
 const createComment = `-- name: CreateComment :one
-INSERT INTO user_comment (
+INSERT INTO comments (
   blog_id,
   user_id,
-  coment
+  comment
 ) VALUES (
   $1, $2, $3
-) RETURNING id, blog_id, user_id, coment
+) RETURNING id, blog_id, user_id, comment
 `
 
 type CreateCommentParams struct {
-	BlogID int32  `json:"blog_id"`
-	UserID int32  `json:"user_id"`
-	Coment string `json:"coment"`
+	BlogID  int32  `json:"blog_id"`
+	UserID  int32  `json:"user_id"`
+	Comment string `json:"comment"`
 }
 
-func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (UserComment, error) {
-	row := q.db.QueryRowContext(ctx, createComment, arg.BlogID, arg.UserID, arg.Coment)
-	var i UserComment
+func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (Comment, error) {
+	row := q.db.QueryRowContext(ctx, createComment, arg.BlogID, arg.UserID, arg.Comment)
+	var i Comment
 	err := row.Scan(
 		&i.ID,
 		&i.BlogID,
 		&i.UserID,
-		&i.Coment,
+		&i.Comment,
 	)
 	return i, err
 }
 
 const deleteComment = `-- name: DeleteComment :exec
-
-DELETE FROM user_comment
+DELETE FROM comments
 WHERE id = $1
 `
 
-// -- name: UpdateCommentContent :one
-// UPDATE user_comment
-// SET content = $2,
-// WHERE id = $1
-// RETURNING *;
-func (q *Queries) DeleteComment(ctx context.Context, id int64) error {
+func (q *Queries) DeleteComment(ctx context.Context, id int32) error {
 	_, err := q.db.ExecContext(ctx, deleteComment, id)
 	return err
 }
 
-const listComment = `-- name: ListComment :many
-SELECT id, blog_id, user_id, coment FROM user_comment
+const getComment = `-- name: GetComment :many
+SELECT id, blog_id, user_id, comment FROM comments
 WHERE blog_id = $1
 `
 
-func (q *Queries) ListComment(ctx context.Context, blogID int32) ([]UserComment, error) {
-	rows, err := q.db.QueryContext(ctx, listComment, blogID)
+func (q *Queries) GetComment(ctx context.Context, blogID int32) ([]Comment, error) {
+	rows, err := q.db.QueryContext(ctx, getComment, blogID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []UserComment
+	var items []Comment
 	for rows.Next() {
-		var i UserComment
+		var i Comment
 		if err := rows.Scan(
 			&i.ID,
 			&i.BlogID,
 			&i.UserID,
-			&i.Coment,
+			&i.Comment,
 		); err != nil {
 			return nil, err
 		}

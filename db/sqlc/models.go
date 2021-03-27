@@ -5,7 +5,7 @@ package db
 import ()
 
 type Blog struct {
-	ID       int64  `json:"id"`
+	ID       int32  `json:"id"`
 	Title    string `json:"title"`
 	Content  string `json:"content"`
 	AuthorID int32  `json:"author_id"`
@@ -16,21 +16,21 @@ type Category struct {
 	BlogID int32  `json:"blog_id"`
 }
 
+type Comment struct {
+	ID      int32  `json:"id"`
+	BlogID  int32  `json:"blog_id"`
+	UserID  int32  `json:"user_id"`
+	Comment string `json:"comment"`
+}
+
 type Tag struct {
 	Title  string `json:"title"`
 	BlogID int32  `json:"blog_id"`
 }
 
 type User struct {
-	ID       int64  `json:"id"`
+	ID       int32  `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Name     string `json:"name"`
-}
-
-type UserComment struct {
-	ID     int64  `json:"id"`
-	BlogID int32  `json:"blog_id"`
-	UserID int32  `json:"user_id"`
-	Coment string `json:"coment"`
 }

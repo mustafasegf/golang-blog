@@ -41,11 +41,11 @@ func (server *Server) setupRouter() {
 	router.POST("/users/login", server.loginUser)
 	// router.GET("/users/:id", server.getAccount)
 
-	// router.POST("/blogs", server.createBlog)
-	// router.GET("/blogs/:id", server.getBlog)
+	router.POST("/blogs", server.createBlog)
+	router.GET("/blogs/:id", server.getBlog)
 
-	// router.POST("/blogs/:id/comments", server.createComment)
-	// router.GET("/blogs/:id/comments", server.getBlog)
+	router.POST("/blogs/:id/comments", server.createComment)
+	router.GET("/blogs/:id/comments", server.getComment)
 
 	server.router = router
 }

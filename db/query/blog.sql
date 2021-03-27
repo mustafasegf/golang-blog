@@ -15,18 +15,6 @@ WHERE id = $1 LIMIT 1;
 SELECT * FROM blog
 ORDER BY TITLE;
 
--- -- name: UpdateBlogContent :one
--- UPDATE blog 
--- SET content = $2, 
--- WHERE id = $1
--- RETURNING *;
-
--- -- name: UpdateBlogTitle :one
--- UPDATE blog 
--- SET title = $2, 
--- WHERE id = $1
--- RETURNING *;
-
 -- name: DeleteBlog :exec
 DELETE FROM blog
 WHERE id = $1;

@@ -36,23 +36,11 @@ func (q *Queries) CreateBlog(ctx context.Context, arg CreateBlogParams) (Blog, e
 }
 
 const deleteBlog = `-- name: DeleteBlog :exec
-
-
 DELETE FROM blog
 WHERE id = $1
 `
 
-// -- name: UpdateBlogContent :one
-// UPDATE blog
-// SET content = $2,
-// WHERE id = $1
-// RETURNING *;
-// -- name: UpdateBlogTitle :one
-// UPDATE blog
-// SET title = $2,
-// WHERE id = $1
-// RETURNING *;
-func (q *Queries) DeleteBlog(ctx context.Context, id int64) error {
+func (q *Queries) DeleteBlog(ctx context.Context, id int32) error {
 	_, err := q.db.ExecContext(ctx, deleteBlog, id)
 	return err
 }
@@ -62,7 +50,7 @@ SELECT id, title, content, author_id FROM blog
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetBlog(ctx context.Context, id int64) (Blog, error) {
+func (q *Queries) GetBlog(ctx context.Context, id int32) (Blog, error) {
 	row := q.db.QueryRowContext(ctx, getBlog, id)
 	var i Blog
 	err := row.Scan(
