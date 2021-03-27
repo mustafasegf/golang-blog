@@ -36,22 +36,32 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 
 func (server *Server) setupRouter() {
 	router := gin.Default()
+	router.LoadHTMLGlob("templates/*")
+	router.Static("/static", "./static")
 
-	router.POST("/users", server.createUser)
-	router.POST("/users/login", server.loginUser)
+	
+	router.GET("/", server.index)
+	router.GET("/register", server.register)
+	router.GET("/login", server.login)
+	router.GET("blogs/:id", server.renderBlog)
 
-	router.POST("/blogs", server.createBlog)
-	router.GET("/blogs", server.listBlog)
-	router.GET("/blogs/:id", server.getBlog)
+	api := router.Group("/api")
 
-	router.POST("/blogs/:id/update", server.updateBlog)
-	router.POST("/blogs/:id/delete", server.deleteBlog)
+	api.POST("/users", server.createUser)
+	api.POST("/users/login", server.loginUser)
 
-	router.POST("/blogs/:id/comments", server.createComment)
-	router.GET("/blogs/:id/comments", server.getComment)
+	api.POST("/blogs", server.createBlog)
+	api.GET("/blogs", server.listBlog)
+	api.GET("/blogs/:id", server.getBlog)
 
-	router.POST("/comments/:id/update", server.updateComment)
-	router.POST("/comments/:id/delete", server.deleteComment)
+	api.POST("/blogs/:id/update", server.updateBlog)
+	api.POST("/blogs/:id/delete", server.deleteBlog)
+
+	api.POST("/blogs/:id/comments", server.createComment)
+	api.GET("/blogs/:id/comments", server.getComment)
+
+	api.POST("/comments/:id/update", server.updateComment)
+	api.POST("/comments/:id/delete", server.deleteComment)
 
 	server.router = router
 }

@@ -12,7 +12,7 @@ type Querier interface {
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteBlog(ctx context.Context, id int32) error
 	DeleteComment(ctx context.Context, id int32) error
-	GetBlog(ctx context.Context, id int32) (Blog, error)
+	GetBlog(ctx context.Context, id int32) (GetBlogRow, error)
 	GetComment(ctx context.Context, blogID int32) ([]Comment, error)
 	GetUser(ctx context.Context, username string) (User, error)
 	ListBlog(ctx context.Context) ([]ListBlogRow, error)

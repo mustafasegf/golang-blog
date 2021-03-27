@@ -46,18 +46,28 @@ func (q *Queries) DeleteBlog(ctx context.Context, id int32) error {
 }
 
 const getBlog = `-- name: GetBlog :one
-SELECT id, title, content, author_id FROM blog
-WHERE id = $1 LIMIT 1
+SELECT b.id, title, content, name 
+FROM blog as b
+JOIN users as u
+ON u.id = b.author_id
+WHERE b.id = $1 LIMIT 1
 `
 
-func (q *Queries) GetBlog(ctx context.Context, id int32) (Blog, error) {
+type GetBlogRow struct {
+	ID      int32  `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Name    string `json:"name"`
+}
+
+func (q *Queries) GetBlog(ctx context.Context, id int32) (GetBlogRow, error) {
 	row := q.db.QueryRowContext(ctx, getBlog, id)
-	var i Blog
+	var i GetBlogRow
 	err := row.Scan(
 		&i.ID,
 		&i.Title,
 		&i.Content,
-		&i.AuthorID,
+		&i.Name,
 	)
 	return i, err
 }

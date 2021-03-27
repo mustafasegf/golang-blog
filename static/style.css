@@ -1,0 +1,116 @@
+:root {
+  --main-bg: #ffffff;
+  --seccond-bg: #f9f9ff;
+  --gradien: linear-gradient(90deg, rgba(132, 144, 255, 1) 0%, rgba(98, 189, 252, 1) 100%);
+  --margin: calc(50vw - 442px);
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.footer {
+  width: 100%;
+  height: 100px;
+  background: #04091e;
+  color: white;
+}
+
+h1 {
+  font-size: 60px;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 32px;
+  font-weight: 500;
+}
+
+h5 {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.content {
+  height: calc(100% - 200px);
+  margin: 0px var(--margin);
+  min-height: calc(100vh - 248px);
+}
+
+.align-center {
+  text-align: center;
+}
+
+.card{
+  background-color: #85a5ff;
+  color: white;
+  border-radius: 5px;
+  transition: transform .1s;
+}
+
+a{
+  text-decoration: none;
+  color: #85a5ff;
+}
+.card:hover {
+  transform: scale(1.1);
+}
+
+.card h5{
+  padding: 0.5em 1em;
+  text-align: center;
+}
+
+.card p{
+  padding: 0.5em 0.5em;
+  text-align: center;
+}
+
+.img-card{
+  width: 100%;
+  max-height: 350px;
+  border-radius: 5px 5px 0 0;
+}
+
+.img-div{
+  height:350px
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5em 2em;
+  margin: 1em 0;
+  background: var(--gradien);
+  text-decoration: none;
+  text-transform: uppercase;
+  width: fit-content;
+  color: #ffffff;
+}
+
+.space {
+  padding-bottom: 100px;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (max-device-width: 768px) {
+  :root {
+    --margin: 1.5em;
+  }
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  :root {
+    --margin: 5em;
+  }
+}
+
+/* Large screens ----------- */
+@media only screen and (min-width: 1824px) {
+  :root {
+    --margin: max(275px, calc(50vw - 720px));
+  }
+}
