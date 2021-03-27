@@ -19,4 +19,8 @@ migrateup:
 migratedown:
 	migrate -path db/migration -database "postgresql://root:password@localhost:5432/golang-blog?sslmode=disable" -verbose down
 
-.PHONY: pullpostgres postgres removecontainer createdb dropdb migrateup migratedown
+# note: used only in dev
+sqlc:
+	sqlc generate
+
+.PHONY: pullpostgres postgres removecontainer createdb dropdb migrateup migratedown sqlc
