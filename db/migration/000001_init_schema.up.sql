@@ -8,13 +8,12 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "blog" (
-  "id" SERIAL,
+  "id" SERIAL PRIMARY KEY,
   "title" varchar,
   "content" text,
   "created" timestamp,
   "updated" timestamp,
-  "author_id" int,
-  PRIMARY KEY ("id", "author_id")
+  "author_id" int
 );
 
 CREATE TABLE "user_comment" (
