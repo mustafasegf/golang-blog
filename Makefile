@@ -13,7 +13,6 @@ createdb:
 dropdb:
 	docker exec -it golang-blog dropdb golang-blog
 
-
 migrateup:
 	migrate -path db/migration -database "postgresql://root:password@localhost:5432/golang-blog?sslmode=disable" -verbose up
 

@@ -1,19 +1,19 @@
 CREATE TABLE "users" (
-  "id" bigint PRIMARY KEY,
+  "id" SERIAL  PRIMARY KEY,
   "username" varchar NOT NULL UNIQUE ,
   "password" varchar NOT NULL,
   "name" varchar NOT NULL
 );
 
 CREATE TABLE "blog" (
-  "id" bigint PRIMARY KEY,
+  "id" SERIAL  PRIMARY KEY,
   "title" varchar NOT NULL,
   "content" text NOT NULL,
   "author_id" int NOT NULL
 );
 
 CREATE TABLE "user_comment" (
-  "id" bigint PRIMARY KEY,
+  "id" SERIAL  PRIMARY KEY,
   "blog_id" int NOT NULL,
   "user_id" int NOT NULL,
   "coment" text NOT NULL
