@@ -63,24 +63,34 @@ func (q *Queries) GetBlog(ctx context.Context, id int32) (Blog, error) {
 }
 
 const listBlog = `-- name: ListBlog :many
-SELECT id, title, content, author_id FROM blog
-ORDER BY TITLE
+SELECT b.id, title, content, name 
+FROM blog as b
+JOIN users as u
+ON u.id = b.author_id
+ORDER BY id
 `
 
-func (q *Queries) ListBlog(ctx context.Context) ([]Blog, error) {
+type ListBlogRow struct {
+	ID      int32  `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Name    string `json:"name"`
+}
+
+func (q *Queries) ListBlog(ctx context.Context) ([]ListBlogRow, error) {
 	rows, err := q.db.QueryContext(ctx, listBlog)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Blog
+	var items []ListBlogRow
 	for rows.Next() {
-		var i Blog
+		var i ListBlogRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Title,
 			&i.Content,
-			&i.AuthorID,
+			&i.Name,
 		); err != nil {
 			return nil, err
 		}
@@ -93,4 +103,57 @@ func (q *Queries) ListBlog(ctx context.Context) ([]Blog, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateBlog = `-- name: UpdateBlog :exec
+UPDATE blog
+SET title = $2,
+content = $3
+WHERE id = $1
+RETURNING id, title, content, author_id
+`
+
+type UpdateBlogParams struct {
+	ID      int32  `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+
+func (q *Queries) UpdateBlog(ctx context.Context, arg UpdateBlogParams) error {
+	_, err := q.db.ExecContext(ctx, updateBlog, arg.ID, arg.Title, arg.Content)
+	return err
+}
+
+const updateBlogContent = `-- name: UpdateBlogContent :exec
+UPDATE blog
+SET content = $2
+WHERE id = $1
+RETURNING id, title, content, author_id
+`
+
+type UpdateBlogContentParams struct {
+	ID      int32  `json:"id"`
+	Content string `json:"content"`
+}
+
+func (q *Queries) UpdateBlogContent(ctx context.Context, arg UpdateBlogContentParams) error {
+	_, err := q.db.ExecContext(ctx, updateBlogContent, arg.ID, arg.Content)
+	return err
+}
+
+const updateBlogTitle = `-- name: UpdateBlogTitle :exec
+UPDATE blog
+SET title = $2
+WHERE id = $1
+RETURNING id, title, content, author_id
+`
+
+type UpdateBlogTitleParams struct {
+	ID    int32  `json:"id"`
+	Title string `json:"title"`
+}
+
+func (q *Queries) UpdateBlogTitle(ctx context.Context, arg UpdateBlogTitleParams) error {
+	_, err := q.db.ExecContext(ctx, updateBlogTitle, arg.ID, arg.Title)
+	return err
 }

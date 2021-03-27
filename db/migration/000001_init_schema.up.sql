@@ -29,13 +29,13 @@ CREATE TABLE "category" (
   "blog_id" int NOT NULL
 );
 
-ALTER TABLE "blog" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id");
+ALTER TABLE "blog" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "user_comment" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id");
+ALTER TABLE "comment" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "user_comment" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "comment" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "tags" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id");
+ALTER TABLE "tags" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "category" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id");
+ALTER TABLE "category" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id") ON DELETE CASCADE;
 

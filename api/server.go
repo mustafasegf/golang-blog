@@ -9,7 +9,7 @@ import (
 	"github.com/mustafasegf/golang-blog/util"
 )
 
-// Server serves HTTP requests for our banking service.
+// Server serves HTTP requests for blog service.
 type Server struct {
 	config     util.Config
 	tokenMaker token.Maker
@@ -39,10 +39,13 @@ func (server *Server) setupRouter() {
 
 	router.POST("/users", server.createUser)
 	router.POST("/users/login", server.loginUser)
-	// router.GET("/users/:id", server.getAccount)
 
 	router.POST("/blogs", server.createBlog)
+	router.GET("/blogs", server.listBlog)
 	router.GET("/blogs/:id", server.getBlog)
+
+	router.POST("/blogs/:id/update", server.updateBlog)
+	router.POST("/blogs/:id/delete", server.deleteBlog)
 
 	router.POST("/blogs/:id/comments", server.createComment)
 	router.GET("/blogs/:id/comments", server.getComment)

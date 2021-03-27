@@ -10,15 +10,25 @@ import (
 )
 
 type createCommentsRequest struct {
-	BlogID  int32  `json:"blogId" binding:"required"`
+	BlogID  int32  `uri:"id"`
 	UserID  int32  `json:"userId" binding:"required"`
 	Comment string `json:"comment" binding:"required"`
+	Token   string `json:"token" binding:"required"`
 }
 
 func (server *Server) createComment(ctx *gin.Context) {
 	var req createCommentsRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	if _, err := server.tokenMaker.VerifyToken(req.Token); err != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 

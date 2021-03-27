@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,24 +14,18 @@ type createBlogRequest struct {
 	Title    string `json:"title" binding:"required"`
 	Content  string `json:"content" binding:"required"`
 	AuthorID int32  `json:"authorId" binding:"required"`
-}
-
-type blogResponse struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-}
-
-func newBlogResponse(blog db.Blog) blogResponse {
-	return blogResponse{
-		Title:   blog.Title,
-		Content: blog.Content,
-	}
+	Token    string `json:"token" binding:"required"`
 }
 
 func (server *Server) createBlog(ctx *gin.Context) {
 	var req createBlogRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	if _, err := server.tokenMaker.VerifyToken(req.Token); err != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
@@ -53,8 +48,104 @@ func (server *Server) createBlog(ctx *gin.Context) {
 		return
 	}
 
-	rsp := newBlogResponse(blog)
-	ctx.JSON(http.StatusOK, rsp)
+	ctx.JSON(http.StatusOK, blog)
+}
+
+type deleteBlogId struct {
+	ID int32 `uri:"id" binding:"required"`
+}
+
+type deleteTokenId struct {
+	Token string `json:"token" binding:"required"`
+}
+
+func (server *Server) deleteBlog(ctx *gin.Context) {
+	var reqId deleteBlogId
+	if err := ctx.ShouldBindUri(&reqId); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	var reqToken deleteTokenId
+	if err := ctx.ShouldBindJSON(&reqToken); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	if _, err := server.tokenMaker.VerifyToken(reqToken.Token); err != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	err := server.store.DeleteBlog(ctx, reqId.ID)
+	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok {
+			switch pqErr.Code.Name() {
+			case "foreign_key_violation", "unique_violation":
+				ctx.JSON(http.StatusForbidden, errorResponse(err))
+				return
+			}
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, "Blog deleted")
+}
+
+type updateBlogRequest struct {
+	ID      int32  `uri:"id" binding:"required"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Token   string `json:"token" binding:"required"`
+}
+
+func (server *Server) updateBlog(ctx *gin.Context) {
+	var req updateBlogRequest
+	var err error
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	if _, err := server.tokenMaker.VerifyToken(req.Token); err != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	fmt.Printf("%+v\n", req)
+
+	if req.Content != "" && req.Title != "" {
+		arg := db.UpdateBlogParams{
+			ID:      req.ID,
+			Title:   req.Title,
+			Content: req.Content,
+		}
+		err = server.store.UpdateBlog(ctx, arg)
+	} else if req.Title != "" {
+		arg := db.UpdateBlogTitleParams{
+			ID:    req.ID,
+			Title: req.Title,
+		}
+		err = server.store.UpdateBlogTitle(ctx, arg)
+	} else if req.Content != "" {
+		arg := db.UpdateBlogContentParams{
+			ID:      req.ID,
+			Content: req.Content,
+		}
+		err = server.store.UpdateBlogContent(ctx, arg)
+	}
+	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok {
+			switch pqErr.Code.Name() {
+			case "foreign_key_violation", "unique_violation":
+				ctx.JSON(http.StatusForbidden, errorResponse(err))
+				return
+			}
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, "Blog Updated")
 }
 
 type getBlogRequest struct {
@@ -69,6 +160,21 @@ func (server *Server) getBlog(ctx *gin.Context) {
 	}
 
 	blog, err := server.store.GetBlog(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, blog)
+}
+
+func (server *Server) listBlog(ctx *gin.Context) {
+	blog, err := server.store.ListBlog(ctx)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))

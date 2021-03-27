@@ -15,8 +15,11 @@ type Querier interface {
 	GetBlog(ctx context.Context, id int32) (Blog, error)
 	GetComment(ctx context.Context, blogID int32) ([]Comment, error)
 	GetUser(ctx context.Context, username string) (User, error)
-	ListBlog(ctx context.Context) ([]Blog, error)
+	ListBlog(ctx context.Context) ([]ListBlogRow, error)
 	ListUser(ctx context.Context) ([]User, error)
+	UpdateBlog(ctx context.Context, arg UpdateBlogParams) error
+	UpdateBlogContent(ctx context.Context, arg UpdateBlogContentParams) error
+	UpdateBlogTitle(ctx context.Context, arg UpdateBlogTitleParams) error
 }
 
 var _ Querier = (*Queries)(nil)
