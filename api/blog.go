@@ -2,7 +2,7 @@ package api
 
 import (
 	"database/sql"
-	"fmt"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -92,7 +92,7 @@ func (server *Server) deleteBlog(ctx *gin.Context) {
 }
 
 type updateBlogRequest struct {
-	ID      int32  `uri:"id" binding:"required"`
+	ID      int32  `uri:"id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	Token   string `json:"token" binding:"required"`
@@ -105,13 +105,14 @@ func (server *Server) updateBlog(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
 	if _, err := server.tokenMaker.VerifyToken(req.Token); err != nil {
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
-
-	fmt.Printf("%+v\n", req)
 
 	if req.Content != "" && req.Title != "" {
 		arg := db.UpdateBlogParams{
@@ -132,6 +133,9 @@ func (server *Server) updateBlog(ctx *gin.Context) {
 			Content: req.Content,
 		}
 		err = server.store.UpdateBlogContent(ctx, arg)
+	} else {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(errors.New(`"Key: 'updateBlogRequest.Title' Error:Field validation for 'Title' failed on the 'required' tag" and 'updateBlogRequest.Content' Error:Field validation for 'Content' failed on the 'required' tag"`)))
+		return
 	}
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {

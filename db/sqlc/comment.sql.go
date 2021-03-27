@@ -77,3 +77,20 @@ func (q *Queries) GetComment(ctx context.Context, blogID int32) ([]Comment, erro
 	}
 	return items, nil
 }
+
+const updateComment = `-- name: UpdateComment :exec
+UPDATE comments
+SET comment = $2
+WHERE id = $1
+RETURNING id, blog_id, user_id, comment
+`
+
+type UpdateCommentParams struct {
+	ID      int32  `json:"id"`
+	Comment string `json:"comment"`
+}
+
+func (q *Queries) UpdateComment(ctx context.Context, arg UpdateCommentParams) error {
+	_, err := q.db.ExecContext(ctx, updateComment, arg.ID, arg.Comment)
+	return err
+}

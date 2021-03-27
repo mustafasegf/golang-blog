@@ -20,6 +20,7 @@ type Querier interface {
 	UpdateBlog(ctx context.Context, arg UpdateBlogParams) error
 	UpdateBlogContent(ctx context.Context, arg UpdateBlogContentParams) error
 	UpdateBlogTitle(ctx context.Context, arg UpdateBlogTitleParams) error
+	UpdateComment(ctx context.Context, arg UpdateCommentParams) error
 }
 
 var _ Querier = (*Queries)(nil)

@@ -11,6 +11,12 @@ INSERT INTO comments (
 SELECT * FROM comments
 WHERE blog_id = $1;
 
+-- name: UpdateComment :exec
+UPDATE comments
+SET comment = $2
+WHERE id = $1
+RETURNING *;
+
 -- name: DeleteComment :exec
 DELETE FROM comments
 WHERE id = $1;

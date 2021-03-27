@@ -50,6 +50,9 @@ func (server *Server) setupRouter() {
 	router.POST("/blogs/:id/comments", server.createComment)
 	router.GET("/blogs/:id/comments", server.getComment)
 
+	router.POST("/comments/:id/update", server.updateComment)
+	router.POST("/comments/:id/delete", server.deleteComment)
+
 	server.router = router
 }
 
