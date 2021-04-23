@@ -26,7 +26,9 @@ sqlc:
 build-nix:
 	go build -o ./bin main.go; ./bin/main
 
-buiid-win:
+build-win:
 	go build -o .\bin main.go; .\bin\main
 
-.PHONY: pullpostgres postgres removecontainer createdb dropdb migrateup migratedown sqlc build-nix buiid-win
+watch:
+	air -c .air.conf
+.PHONY: pullpostgres postgres removecontainer createdb dropdb migrateup migratedown sqlc build-nix buiid-win watch
