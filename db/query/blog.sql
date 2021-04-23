@@ -8,14 +8,14 @@ INSERT INTO blog (
 ) RETURNING *;
 
 -- name: GetBlog :one
-SELECT b.id, title, content, name 
+SELECT b.id, title, content, name, u.id as userid 
 FROM blog as b
 JOIN users as u
 ON u.id = b.author_id
 WHERE b.id = $1 LIMIT 1;
 
 -- name: ListBlog :many
-SELECT b.id, title, content, name 
+SELECT b.id, title, content, name, u.id as userid
 FROM blog as b
 JOIN users as u
 ON u.id = b.author_id

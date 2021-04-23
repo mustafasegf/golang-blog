@@ -46,7 +46,7 @@ func (q *Queries) DeleteBlog(ctx context.Context, id int32) error {
 }
 
 const getBlog = `-- name: GetBlog :one
-SELECT b.id, title, content, name 
+SELECT b.id, title, content, name, u.id as userId 
 FROM blog as b
 JOIN users as u
 ON u.id = b.author_id
@@ -58,6 +58,7 @@ type GetBlogRow struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	Name    string `json:"name"`
+	Userid  int32  `json:"userid"`
 }
 
 func (q *Queries) GetBlog(ctx context.Context, id int32) (GetBlogRow, error) {
@@ -68,12 +69,13 @@ func (q *Queries) GetBlog(ctx context.Context, id int32) (GetBlogRow, error) {
 		&i.Title,
 		&i.Content,
 		&i.Name,
+		&i.Userid,
 	)
 	return i, err
 }
 
 const listBlog = `-- name: ListBlog :many
-SELECT b.id, title, content, name 
+SELECT b.id, title, content, name, u.id as userId
 FROM blog as b
 JOIN users as u
 ON u.id = b.author_id
@@ -85,6 +87,7 @@ type ListBlogRow struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	Name    string `json:"name"`
+	Userid  int32  `json:"userid"`
 }
 
 func (q *Queries) ListBlog(ctx context.Context) ([]ListBlogRow, error) {
@@ -101,6 +104,7 @@ func (q *Queries) ListBlog(ctx context.Context) ([]ListBlogRow, error) {
 			&i.Title,
 			&i.Content,
 			&i.Name,
+			&i.Userid,
 		); err != nil {
 			return nil, err
 		}
