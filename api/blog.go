@@ -2,12 +2,13 @@ package api
 
 import (
 	"database/sql"
-	"errors"	
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
 	db "github.com/mustafasegf/golang-blog/db/sqlc"
+	"github.com/mustafasegf/golang-blog/token"
 )
 
 type createBlogRequest struct {
@@ -24,10 +25,12 @@ func (server *Server) createBlog(ctx *gin.Context) {
 		return
 	}
 
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
 	arg := db.CreateBlogParams{
 		Title:    req.Title,
 		Content:  req.Content,
-		AuthorID: req.AuthorID,
+		AuthorID: authPayload.UserId,
 	}
 
 	blog, err := server.store.CreateBlog(ctx, arg)
