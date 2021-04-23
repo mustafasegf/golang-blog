@@ -99,6 +99,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 	accessToken, err := server.tokenMaker.CreateToken(
 		user.Username,
+		user.ID,
 		server.config.AccessTokenDuration,
 	)
 	if err != nil {
