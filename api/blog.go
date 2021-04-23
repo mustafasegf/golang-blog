@@ -69,7 +69,24 @@ func (server *Server) deleteBlog(ctx *gin.Context) {
 		return
 	}
 
-	err := server.store.DeleteBlog(ctx, reqId.ID)
+	blog, err := server.store.GetBlog(ctx, reqId.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if authPayload.UserId != blog.Userid {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	err = server.store.DeleteBlog(ctx, reqId.ID)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
@@ -101,6 +118,23 @@ func (server *Server) updateBlog(ctx *gin.Context) {
 	}
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	blog, err := server.store.GetBlog(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if authPayload.UserId != blog.Userid {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
