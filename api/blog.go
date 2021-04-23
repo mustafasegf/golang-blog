@@ -2,7 +2,7 @@ package api
 
 import (
 	"database/sql"
-	"errors"
+	"errors"	
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,11 +21,6 @@ func (server *Server) createBlog(ctx *gin.Context) {
 	var req createBlogRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
-		return
-	}
-
-	if _, err := server.tokenMaker.VerifyToken(req.Token); err != nil {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
@@ -70,10 +65,6 @@ func (server *Server) deleteBlog(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	if _, err := server.tokenMaker.VerifyToken(reqToken.Token); err != nil {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-		return
-	}
 
 	err := server.store.DeleteBlog(ctx, reqId.ID)
 	if err != nil {
@@ -107,10 +98,6 @@ func (server *Server) updateBlog(ctx *gin.Context) {
 	}
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
-		return
-	}
-	if _, err := server.tokenMaker.VerifyToken(req.Token); err != nil {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 

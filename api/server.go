@@ -47,21 +47,24 @@ func (server *Server) setupRouter() {
 
 	api := router.Group("/api")
 
+
 	api.POST("/users", server.createUser)
 	api.POST("/users/login", server.loginUser)
 
-	api.POST("/blogs", server.createBlog)
-	api.GET("/blogs", server.listBlog)
-	api.GET("/blogs/:id", server.getBlog)
+	apiAuth := api.Use(authMiddleware(server.tokenMaker))
 
-	api.POST("/blogs/:id/update", server.updateBlog)
-	api.POST("/blogs/:id/delete", server.deleteBlog)
+	apiAuth.POST("/blogs", server.createBlog)
+	apiAuth.GET("/blogs", server.listBlog)
+	apiAuth.GET("/blogs/:id", server.getBlog)
 
-	api.POST("/blogs/:id/comments", server.createComment)
-	api.GET("/blogs/:id/comments", server.getComment)
+	apiAuth.POST("/blogs/:id/update", server.updateBlog)
+	apiAuth.POST("/blogs/:id/delete", server.deleteBlog)
 
-	api.POST("/comments/:id/update", server.updateComment)
-	api.POST("/comments/:id/delete", server.deleteComment)
+	apiAuth.POST("/blogs/:id/comments", server.createComment)
+	apiAuth.GET("/blogs/:id/comments", server.getComment)
+
+	apiAuth.POST("/comments/:id/update", server.updateComment)
+	apiAuth.POST("/comments/:id/delete", server.deleteComment)
 
 	server.router = router
 }

@@ -27,10 +27,6 @@ func (server *Server) createComment(ctx *gin.Context) {
 		return
 	}
 
-	if _, err := server.tokenMaker.VerifyToken(req.Token); err != nil {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-		return
-	}
 
 	arg := db.CreateCommentParams{
 		BlogID:  req.BlogID,
@@ -95,10 +91,6 @@ func (server *Server) updateComment(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	if _, err := server.tokenMaker.VerifyToken(req.Token); err != nil {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-		return
-	}
 	arg := db.UpdateCommentParams{
 		ID:      req.ID,
 		Comment: req.Comment,
@@ -132,10 +124,6 @@ func (server *Server) deleteComment(ctx *gin.Context) {
 	var reqToken deleteTokenId
 	if err := ctx.ShouldBindJSON(&reqToken); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
-		return
-	}
-	if _, err := server.tokenMaker.VerifyToken(reqToken.Token); err != nil {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
