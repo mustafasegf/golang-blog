@@ -46,7 +46,7 @@ func (q *Queries) DeleteBlog(ctx context.Context, id int32) error {
 }
 
 const getBlog = `-- name: GetBlog :one
-SELECT b.id, title, content, name, u.id as userId 
+SELECT b.id, title, content, name, u.id as userid 
 FROM blog as b
 JOIN users as u
 ON u.id = b.author_id
@@ -75,7 +75,7 @@ func (q *Queries) GetBlog(ctx context.Context, id int32) (GetBlogRow, error) {
 }
 
 const listBlog = `-- name: ListBlog :many
-SELECT b.id, title, content, name, u.id as userId
+SELECT b.id, title, content, name, u.id as userid
 FROM blog as b
 JOIN users as u
 ON u.id = b.author_id

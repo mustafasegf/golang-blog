@@ -7,11 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
 	db "github.com/mustafasegf/golang-blog/db/sqlc"
+	"github.com/mustafasegf/golang-blog/token"
 )
 
 type createCommentsRequest struct {
 	BlogID  int32  `uri:"id"`
-	UserID  int32  `json:"userId" binding:"required"`
 	Comment string `json:"comment" binding:"required"`
 	Token   string `json:"token" binding:"required"`
 }
@@ -27,10 +27,11 @@ func (server *Server) createComment(ctx *gin.Context) {
 		return
 	}
 
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 
 	arg := db.CreateCommentParams{
 		BlogID:  req.BlogID,
-		UserID:  req.UserID,
+		UserID:  authPayload.UserId,
 		Comment: req.Comment,
 	}
 

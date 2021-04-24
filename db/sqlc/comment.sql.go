@@ -78,6 +78,23 @@ func (q *Queries) GetComment(ctx context.Context, blogID int32) ([]Comment, erro
 	return items, nil
 }
 
+const getOneComment = `-- name: GetOneComment :one
+SELECT id, blog_id, user_id, comment FROM comments
+WHERE id = $1
+`
+
+func (q *Queries) GetOneComment(ctx context.Context, id int32) (Comment, error) {
+	row := q.db.QueryRowContext(ctx, getOneComment, id)
+	var i Comment
+	err := row.Scan(
+		&i.ID,
+		&i.BlogID,
+		&i.UserID,
+		&i.Comment,
+	)
+	return i, err
+}
+
 const updateComment = `-- name: UpdateComment :exec
 UPDATE comments
 SET comment = $2

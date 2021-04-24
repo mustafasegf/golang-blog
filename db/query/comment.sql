@@ -11,6 +11,10 @@ INSERT INTO comments (
 SELECT * FROM comments
 WHERE blog_id = $1;
 
+-- name: GetOneComment :one
+SELECT * FROM comments
+WHERE id = $1; knkih
+
 -- name: UpdateComment :exec
 UPDATE comments
 SET comment = $2
