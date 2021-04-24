@@ -14,8 +14,6 @@ import (
 type createBlogRequest struct {
 	Title    string `json:"title" binding:"required"`
 	Content  string `json:"content" binding:"required"`
-	AuthorID int32  `json:"authorId" binding:"required"`
-	Token    string `json:"token" binding:"required"`
 }
 
 func (server *Server) createBlog(ctx *gin.Context) {
@@ -106,7 +104,6 @@ type updateBlogRequest struct {
 	ID      int32  `uri:"id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
-	Token   string `json:"token" binding:"required"`
 }
 
 func (server *Server) updateBlog(ctx *gin.Context) {
@@ -134,7 +131,7 @@ func (server *Server) updateBlog(ctx *gin.Context) {
 
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	if authPayload.UserId != blog.Userid {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, errorResponse(errors.New("Unauthorize Acces. Can't change blog")))
 		return
 	}
 
@@ -190,7 +187,7 @@ func (server *Server) getBlog(ctx *gin.Context) {
 	blog, err := server.store.GetBlog(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			ctx.JSON(http.StatusUnauthorized, errorResponse(errors.New("Unauthorize Acces. Can't delete blog")))
 			return
 		}
 
