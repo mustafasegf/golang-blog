@@ -187,7 +187,7 @@ func (server *Server) getBlog(ctx *gin.Context) {
 	blog, err := server.store.GetBlog(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusUnauthorized, errorResponse(err)
+			ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 			return
 		}
 
