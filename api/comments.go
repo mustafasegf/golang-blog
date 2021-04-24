@@ -92,11 +92,29 @@ func (server *Server) updateComment(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
+
+	comment, err := server.store.GetOneComment(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	if authPayload.UserId != comment.UserID {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
 	arg := db.UpdateCommentParams{
 		ID:      req.ID,
 		Comment: req.Comment,
 	}
-	err := server.store.UpdateComment(ctx, arg)
+	err = server.store.UpdateComment(ctx, arg)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
@@ -128,7 +146,25 @@ func (server *Server) deleteComment(ctx *gin.Context) {
 		return
 	}
 
-	err := server.store.DeleteComment(ctx, reqId.ID)
+	comment, err := server.store.GetOneComment(ctx, reqId.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+
+	if authPayload.UserId != comment.UserID {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	err = server.store.DeleteComment(ctx, reqId.ID)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
