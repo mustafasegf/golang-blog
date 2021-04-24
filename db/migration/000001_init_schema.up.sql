@@ -5,7 +5,7 @@ CREATE TABLE "users" (
   "name" varchar NOT NULL
 );
 
-CREATE TABLE "blog" (
+CREATE TABLE "blogs" (
   "id" SERIAL  PRIMARY KEY,
   "title" varchar NOT NULL,
   "content" text NOT NULL,
@@ -19,23 +19,9 @@ CREATE TABLE "comments" (
   "comment" text NOT NULL
 );
 
-CREATE TABLE "tags" (
-  "title" varchar PRIMARY KEY,
-  "blog_id" int NOT NULL
-);
 
-CREATE TABLE "category" (
-  "title" varchar PRIMARY KEY,
-  "blog_id" int NOT NULL
-);
+ALTER TABLE "blogs" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "blog" ADD FOREIGN KEY ("author_id") REFERENCES "users" ("id") ON DELETE CASCADE;
+ALTER TABLE "comments" ADD FOREIGN KEY ("blog_id") REFERENCES "blogs" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "comment" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id") ON DELETE CASCADE;
-
-ALTER TABLE "comment" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
-
-ALTER TABLE "tags" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id") ON DELETE CASCADE;
-
-ALTER TABLE "category" ADD FOREIGN KEY ("blog_id") REFERENCES "blog" ("id") ON DELETE CASCADE;
-
+ALTER TABLE "comments" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;

@@ -11,21 +11,11 @@ type Blog struct {
 	AuthorID int32  `json:"author_id"`
 }
 
-type Category struct {
-	Title  string `json:"title"`
-	BlogID int32  `json:"blog_id"`
-}
-
 type Comment struct {
 	ID      int32  `json:"id"`
 	BlogID  int32  `json:"blog_id"`
 	UserID  int32  `json:"user_id"`
 	Comment string `json:"comment"`
-}
-
-type Tag struct {
-	Title  string `json:"title"`
-	BlogID int32  `json:"blog_id"`
 }
 
 type User struct {

@@ -8,7 +8,7 @@ import (
 )
 
 const createBlog = `-- name: CreateBlog :one
-INSERT INTO blog (
+INSERT INTO blogs (
   title,
   content,
   author_id
@@ -36,7 +36,7 @@ func (q *Queries) CreateBlog(ctx context.Context, arg CreateBlogParams) (Blog, e
 }
 
 const deleteBlog = `-- name: DeleteBlog :exec
-DELETE FROM blog
+DELETE FROM blogs
 WHERE id = $1
 `
 
@@ -47,7 +47,7 @@ func (q *Queries) DeleteBlog(ctx context.Context, id int32) error {
 
 const getBlog = `-- name: GetBlog :one
 SELECT b.id, title, content, name, u.id as userid 
-FROM blog as b
+FROM blogs as b
 JOIN users as u
 ON u.id = b.author_id
 WHERE b.id = $1 LIMIT 1
@@ -76,7 +76,7 @@ func (q *Queries) GetBlog(ctx context.Context, id int32) (GetBlogRow, error) {
 
 const listBlog = `-- name: ListBlog :many
 SELECT b.id, title, content, name, u.id as userid
-FROM blog as b
+FROM blogs as b
 JOIN users as u
 ON u.id = b.author_id
 ORDER BY id
@@ -120,7 +120,7 @@ func (q *Queries) ListBlog(ctx context.Context) ([]ListBlogRow, error) {
 }
 
 const updateBlog = `-- name: UpdateBlog :exec
-UPDATE blog
+UPDATE blogs
 SET title = $2,
 content = $3
 WHERE id = $1
@@ -139,7 +139,7 @@ func (q *Queries) UpdateBlog(ctx context.Context, arg UpdateBlogParams) error {
 }
 
 const updateBlogContent = `-- name: UpdateBlogContent :exec
-UPDATE blog
+UPDATE blogs
 SET content = $2
 WHERE id = $1
 RETURNING id, title, content, author_id
@@ -156,7 +156,7 @@ func (q *Queries) UpdateBlogContent(ctx context.Context, arg UpdateBlogContentPa
 }
 
 const updateBlogTitle = `-- name: UpdateBlogTitle :exec
-UPDATE blog
+UPDATE blogs
 SET title = $2
 WHERE id = $1
 RETURNING id, title, content, author_id
