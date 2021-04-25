@@ -15,7 +15,7 @@ INSERT INTO comments (
 ) VALUES (
 
   $1, $2, $3
-) RETURNING id, blog_id, user_id, comment
+) RETURNING id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = $2) AS name
 `
 
 type CreateCommentParams struct {
@@ -24,14 +24,23 @@ type CreateCommentParams struct {
 	Comment string `json:"comment"`
 }
 
-func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (Comment, error) {
+type CreateCommentRow struct {
+	ID      int32       `json:"id"`
+	BlogID  int32       `json:"blog_id"`
+	UserID  int32       `json:"user_id"`
+	Comment string      `json:"comment"`
+	Name    interface{} `json:"name"`
+}
+
+func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (CreateCommentRow, error) {
 	row := q.db.QueryRowContext(ctx, createComment, arg.BlogID, arg.UserID, arg.Comment)
-	var i Comment
+	var i CreateCommentRow
 	err := row.Scan(
 		&i.ID,
 		&i.BlogID,
 		&i.UserID,
 		&i.Comment,
+		&i.Name,
 	)
 	return i, err
 }
@@ -118,15 +127,23 @@ func (q *Queries) GetOneComment(ctx context.Context, id int32) (GetOneCommentRow
 }
 
 const updateComment = `-- name: UpdateComment :exec
-UPDATE comments
+UPDATE comments AS c
 SET comment = $2
-WHERE id = $1
-RETURNING id, blog_id, user_id, comment
+WHERE c.id = $1
+RETURNING id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name
 `
 
 type UpdateCommentParams struct {
 	ID      int32  `json:"id"`
 	Comment string `json:"comment"`
+}
+
+type UpdateCommentRow struct {
+	ID      int32       `json:"id"`
+	BlogID  int32       `json:"blog_id"`
+	UserID  int32       `json:"user_id"`
+	Comment string      `json:"comment"`
+	Name    interface{} `json:"name"`
 }
 
 func (q *Queries) UpdateComment(ctx context.Context, arg UpdateCommentParams) error {

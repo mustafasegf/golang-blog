@@ -6,7 +6,7 @@ INSERT INTO comments (
 ) VALUES (
 
   $1, $2, $3
-) RETURNING *;
+) RETURNING *, (SELECT u.name from users as u WHERE u.id = $2) AS name;
 
 -- name: GetComment :many
 SELECT *, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name 
@@ -20,10 +20,10 @@ WHERE c.id = $1
 LIMIT 1;
 
 -- name: UpdateComment :exec
-UPDATE comments
+UPDATE comments AS c
 SET comment = $2
-WHERE id = $1
-RETURNING *;
+WHERE c.id = $1
+RETURNING *, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name ;
 
 -- name: DeleteComment :exec
 DELETE FROM comments
