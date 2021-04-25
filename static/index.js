@@ -47,6 +47,9 @@ const loadComment = (id) => {
       let comment = document.createElement('h3');
       comment.innerHTML = "Comments"
       target.appendChild(comment);
+      if (data === null) {
+        data = [{ comment: 'none' }]
+      }
       data.forEach(e => {
         let p = document.createElement('p');
         p.innerHTML = e.comment;
@@ -63,7 +66,7 @@ const register = () => {
     // let Username = document.getElementsByName("username")
     // let Password = document.getElementsByName("password")
     // const form = document.querySelector('form')
-    const formData  = new FormData(form);
+    const formData = new FormData(form);
     let data = {}
     for (let key of formData.keys()) {
       data[key] = formData.get(key);
