@@ -155,7 +155,7 @@ func (server *Server) updateBlog(ctx *gin.Context) {
 		}
 		err = server.store.UpdateBlogContent(ctx, arg)
 	} else {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(errors.New(`"Key: 'updateBlogRequest.Title' Error:Field validation for 'Title' failed on the 'required' tag" and 'updateBlogRequest.Content' Error:Field validation for 'Content' failed on the 'required' tag"`)))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 	if err != nil {
