@@ -104,6 +104,7 @@ const login = (e) => {
     .then(response => response.json())
     .then(resdata => {
       console.log(resdata)
+      window.sessionStorage.accessToken = resdata.access_token
       if (!('error' in resdata)) {
         window.location = '/'
       }
