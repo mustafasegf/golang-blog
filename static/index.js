@@ -59,20 +59,23 @@ const register = () => {
   const form = document.getElementById("form")
   form.addEventListener("submit", (e) => {
     e.preventDefault()
-    let Name = document.getElementsByName("name")
-    let Username = document.getElementsByName("username")
-    let Password = document.getElementsByName("password")
+    // let Name = document.getElementsByName("name")[0]
+    // let Username = document.getElementsByName("username")
+    // let Password = document.getElementsByName("password")
+    // const form = document.querySelector('form')
+    const formData  = new FormData(form);
+    let data = {}
+    for (let key of formData.keys()) {
+      data[key] = formData.get(key);
+    }
+    console.log(data)
 
     fetch('http://localhost:3000/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        Name,
-        Username,
-        Password
-      })
+      body: JSON.stringify(data)
     })
       .then(response => response.json())
       .then(data => console.log(data))
