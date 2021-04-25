@@ -80,7 +80,7 @@ func (server *Server) deleteBlog(ctx *gin.Context) {
 
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	if authPayload.UserId != blog.Userid {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, errorResponse(errors.New("Unauthorize Acces. Can't delete blog")))
 		return
 	}
 
