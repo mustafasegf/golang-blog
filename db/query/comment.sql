@@ -4,16 +4,18 @@ INSERT INTO comments (
   user_id,
   comment
 ) VALUES (
+
   $1, $2, $3
 ) RETURNING *;
 
 -- name: GetComment :many
-SELECT * FROM comments
-WHERE blog_id = $1;
+SELECT *, (SELECT u.name from users as u WHERE u.id = c.user_id) FROM comments as c
+WHERE c.blog_id = $1;
 
 -- name: GetOneComment :one
-SELECT * FROM comments
-WHERE id = $1;
+SELECT *, (SELECT u.name from users as u WHERE u.id = c.user_id) FROM comments as c
+WHERE c.blog_id = $1
+LIMIT 1;
 
 -- name: UpdateComment :exec
 UPDATE comments
