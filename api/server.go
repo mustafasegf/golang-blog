@@ -55,14 +55,14 @@ func (server *Server) setupRouter() {
 	api.GET("/blogs", server.listBlog)
 	api.GET("/blogs/:id", server.getBlog)
 
-	apiAuth.POST("/blogs/:id/update", server.updateBlog)
-	apiAuth.POST("/blogs/:id/delete", server.deleteBlog)
+	apiAuth.PATCH("/blogs/:id", server.updateBlog)
+	apiAuth.DELETE("/blogs/:id", server.deleteBlog)
 
 	apiAuth.POST("/blogs/:id/comments", server.createComment)
 	api.GET("/blogs/:id/comments", server.getComment)
 
-	apiAuth.POST("/comments/:id/update", server.updateComment)
-	apiAuth.POST("/comments/:id/delete", server.deleteComment)
+	apiAuth.PATCH("/comments/:id", server.updateComment)
+	apiAuth.DELETE("/comments/:id", server.deleteComment)
 
 	server.router = router
 }

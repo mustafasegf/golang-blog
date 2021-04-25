@@ -32,10 +32,10 @@ const loadBlogById = (id) => {
       <h1>${data.title}</h1>
       <h3>${data.name}</h3>
       <p>${data.content}</p>`
-
       loadComment(id)
     });
 }
+
 const loadComment = (id) => {
   fetch(`http://localhost:3000/api/blogs/${id}/comments`)
     .then(response => response.json())
@@ -43,7 +43,7 @@ const loadComment = (id) => {
       console.log(data)
       const comments = document.getElementById("comments")
       if (data === null) {
-        comments.innerHTML  += `<p> None </p>`
+        comments.innerHTML += `<p> None </p>`
       } else {
         data.forEach(e => {
           comments.innerHTML += `
@@ -133,28 +133,31 @@ const addComment = (e, id) => {
       console.log(resdata)
       const comments = document.getElementById("comments")
       if ('id' in resdata) {
-        console.log('ok')
-        let p = document.createElement('p');
-        p.innerHTML = `${resdata.name}:  ${resdata.comment}  `;
-        p.innerHTML += ` <span class="delete" onclick="deleteComment(${resdata.id})">delete</span>`
-        comments.appendChild(p);
+        comments.innerHTML += `
+          <p id="comment-${e.id}">
+            ${e.name}:  ${e.comment} 
+            <span class="delete" onclick="deleteComment(${e.id})">delete</span>
+            <span class="edit" onclick="editComment(${e.id})">edit</span>
+          </p>`
       }
     })
 }
 
 const deleteComment = (id) => {
   console.log(id)
-  fetch(`http://localhost:3000/api/comments/${id}/delete`, {
-    method: 'POST',
+  fetch(`http://localhost:3000/api/comments/${id}`, {
+    method: 'DELETE',
     headers: {
       'Authorization': `bearer ${window.sessionStorage.accessToken}`
     },
   })
     .then(response => response.json())
     .then(resdata => {
-      console.log(resdata)
-      const comments = document.getElementById("comments")
-      const comment = comments.querySelector(`#comment-${id}`)
-      comment.remove()
+      console.log('data', resdata)
+      if ('Comment deleted' === resdata) {
+        const comments = document.getElementById("comments")
+        const comment = comments.querySelector(`#comment-${id}`)
+        comment.remove()
+      }
     })
 }
