@@ -97,6 +97,13 @@ a{
   text-decoration: underline;
 }
 
+.edit {
+  color:lightskyblue;
+}
+.edit:hover {
+  text-decoration: underline;
+}
+
 .space {
   padding-bottom: 100px;
 }

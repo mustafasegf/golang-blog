@@ -48,10 +48,9 @@ const loadComment = (id) => {
         data.forEach(e => {
           comments.innerHTML += `
           <p id="comment-${e.id}">
-            ${e.name}:  ${e.comment} 
-            <span class="delete" onclick="deleteComment(${e.id})">
-              delete
-            </span>
+            ${e.name}:<span id="span-comment-${e.id}">${e.comment}</span>
+            <span class="delete" onclick="deleteComment(${e.id})">delete</span>
+            <span class="edit" onclick="editComment(${e.id})">edit</span>
           </p>`
         });
       }
@@ -134,8 +133,8 @@ const addComment = (e, id) => {
       const comments = document.getElementById("comments")
       if ('id' in resdata) {
         comments.innerHTML += `
-          <p id="comment-${e.id}">
-            ${e.name}:  ${e.comment} 
+          <p id="comment-${resdata.id}">
+            ${resdata.name}:<span id="span-comment-${resdata.id}">${resdata.comment} </span>
             <span class="delete" onclick="deleteComment(${e.id})">delete</span>
             <span class="edit" onclick="editComment(${e.id})">edit</span>
           </p>`
@@ -155,9 +154,51 @@ const deleteComment = (id) => {
     .then(resdata => {
       console.log('data', resdata)
       if ('Comment deleted' === resdata) {
-        const comments = document.getElementById("comments")
-        const comment = comments.querySelector(`#comment-${id}`)
+        const comment = document.getElementById("comments").querySelector(`#comment-${id}`)
         comment.remove()
       }
+    })
+}
+
+const editComment = (id) => {
+  console.log(id)
+  const comment = document.getElementById("comments").querySelector(`#comment-${id}`)
+  const form = document.createElement("div");
+
+  form.innerHTML += `
+  <form action="" id="edit-form" method="POST" onsubmit="fetchEditComment(event, ${id});">
+    <label for="comment"> comment</label>
+    <input type="text" name="comment" />
+    <input type="submit" name="submit" value="edit" />
+  </form>`
+  if (comment.querySelector('#edit-form') !== null ) {
+    comment.querySelector('#edit-form').remove()
+  } else {
+    comment.appendChild(form)
+  }
+}
+
+const fetchEditComment = (e, id) => {
+  e.preventDefault()
+  const form = document.getElementById("edit-form")
+  const formData = new FormData(form);
+  let data = {}
+  for (let key of formData.keys()) {
+    data[key] = formData.get(key);
+  }
+  console.log(data)
+  fetch(`http://localhost:3000/api/comments/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `bearer ${window.sessionStorage.accessToken}`
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(resdata => {
+      console.log(resdata)
+      const comment = document.getElementById("comments").querySelector(`#span-comment-${id}`)
+      comment.innerHTML = data.comment
     })
 }
