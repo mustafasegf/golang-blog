@@ -58,27 +58,30 @@ const loadComment = (id) => {
     });
 }
 
-const register = () => {
+const register = (e) => {
   const form = document.getElementById("form")
-  form.addEventListener("submit", (e) => {
-    e.preventDefault()
-    const formData = new FormData(form);
-    let data = {}
-    for (let key of formData.keys()) {
-      data[key] = formData.get(key);
-    }
-    console.log(data)
+  e.preventDefault()
+  const formData = new FormData(form);
+  let data = {}
+  for (let key of formData.keys()) {
+    data[key] = formData.get(key);
+  }
+  console.log(data)
 
-    fetch('http://localhost:3000/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    })
-      .then(response => response.json())
-      .then(data => console.log(data))
+  fetch('http://localhost:3000/api/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
   })
+    .then(response => response.json())
+    .then(resdata => {
+      console.log(resdata)
+      if (!('error' in resdata)) {
+        window.location = '/login'
+      }
+    })
 }
 
 const login = (e) => {
@@ -99,5 +102,10 @@ const login = (e) => {
     body: JSON.stringify(data)
   })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(resdata => {
+      console.log(resdata)
+      if (!('error' in resdata)) {
+        window.location = '/'
+      }
+    })
 }
