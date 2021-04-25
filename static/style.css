@@ -90,6 +90,13 @@ a{
   color: #ffffff;
 }
 
+.delete {
+  color:red;
+}
+.delete:hover {
+  text-decoration: underline;
+}
+
 .space {
   padding-bottom: 100px;
 }

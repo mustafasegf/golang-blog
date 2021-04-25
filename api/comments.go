@@ -139,11 +139,6 @@ func (server *Server) deleteComment(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	var reqToken deleteTokenId
-	if err := ctx.ShouldBindJSON(&reqToken); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
-		return
-	}
 
 	comment, err := server.store.GetOneComment(ctx, reqId.ID)
 	if err != nil {

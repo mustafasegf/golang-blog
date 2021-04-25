@@ -52,7 +52,10 @@ const loadComment = (id) => {
       }
       data.forEach(e => {
         let p = document.createElement('p');
-        p.innerHTML = `${e.name}:  ${e.comment}`;
+        p.innerHTML = `${e.name}:  ${e.comment}  `;
+        if('id' in e){
+          p.innerHTML += ` <span class="delete" onclick="deleteComment(${e.id})">delete</span>`
+        }
         target.appendChild(p);
       });
       
@@ -128,6 +131,20 @@ const addComment = (e, id) => {
       'Authorization' : `bearer ${window.sessionStorage.accessToken}`
     },
     body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(resdata => {
+      console.log(resdata)
+    })
+}
+
+const deleteComment = (id) => {
+  console.log(id)
+  fetch(`http://localhost:3000/api/comments/${id}/delete`, {
+    method: 'POST',
+    headers: {
+      'Authorization' : `bearer ${window.sessionStorage.accessToken}`
+    },
   })
     .then(response => response.json())
     .then(resdata => {
