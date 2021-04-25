@@ -43,17 +43,18 @@ const loadComment = (id) => {
       console.log(data)
       const comments = document.getElementById("comments")
       if (data === null) {
-        data = [{ comment: 'none', name: '' }]
+        comments.innerHTML  += `<p> None </p>`
+      } else {
+        data.forEach(e => {
+          comments.innerHTML += `
+          <p id="comment-${e.id}">
+            ${e.name}:  ${e.comment} 
+            <span class="delete" onclick="deleteComment(${e.id})">
+              delete
+            </span>
+          </p>`
+        });
       }
-      data.forEach(e => {
-        let p = document.createElement('p');
-        p.innerHTML = `${e.name}:  ${e.comment}  `;
-        if ('id' in e) {
-          p.innerHTML += ` <span class="delete" onclick="deleteComment(${e.id})">delete</span>`
-        }
-        comments.appendChild(p);
-      });
-
     });
 }
 
@@ -152,5 +153,8 @@ const deleteComment = (id) => {
     .then(response => response.json())
     .then(resdata => {
       console.log(resdata)
+      const comments = document.getElementById("comments")
+      const comment = comments.querySelector(`#comment-${id}`)
+      comment.remove()
     })
 }
