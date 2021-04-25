@@ -46,22 +46,20 @@ func (server *Server) setupRouter() {
 	router.GET("blogs/:id", server.renderBlog)
 
 	api := router.Group("/api")
-
+	apiAuth := router.Group("/api").Use(authMiddleware(server.tokenMaker))
 
 	api.POST("/users", server.createUser)
 	api.POST("/users/login", server.loginUser)
 
-	apiAuth := api.Use(authMiddleware(server.tokenMaker))
-
 	apiAuth.POST("/blogs", server.createBlog)
-	apiAuth.GET("/blogs", server.listBlog)
-	apiAuth.GET("/blogs/:id", server.getBlog)
+	api.GET("/blogs", server.listBlog)
+	api.GET("/blogs/:id", server.getBlog)
 
 	apiAuth.POST("/blogs/:id/update", server.updateBlog)
 	apiAuth.POST("/blogs/:id/delete", server.deleteBlog)
 
 	apiAuth.POST("/blogs/:id/comments", server.createComment)
-	apiAuth.GET("/blogs/:id/comments", server.getComment)
+	api.GET("/blogs/:id/comments", server.getComment)
 
 	apiAuth.POST("/comments/:id/update", server.updateComment)
 	apiAuth.POST("/comments/:id/delete", server.deleteComment)
