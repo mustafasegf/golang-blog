@@ -2,7 +2,7 @@
 // source: comment.sql
 
 package db
-            
+
 import (
 	"context"
 )
@@ -59,6 +59,7 @@ const getComment = `-- name: GetComment :many
 SELECT id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name 
 FROM comments as c
 WHERE c.blog_id = $1
+ORDER BY c.id
 `
 
 type GetCommentRow struct {
