@@ -111,7 +111,7 @@ const login = (e) => {
     })
 }
 
-const addComment = (e) => {
+const addComment = (e, id) => {
   const form = document.getElementById("form")
   e.preventDefault()
   const formData = new FormData(form);
@@ -120,7 +120,7 @@ const addComment = (e) => {
     data[key] = formData.get(key);
   }
   console.log(data)
-  fetch(`${window.location.origin}/api${window.location.pathname}/comments`, {
+  fetch(`http://localhost:3000/api/blogs/${id}/comments`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
