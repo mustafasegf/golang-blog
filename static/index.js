@@ -48,12 +48,12 @@ const loadComment = (id) => {
       data.forEach(e => {
         let p = document.createElement('p');
         p.innerHTML = `${e.name}:  ${e.comment}  `;
-        if('id' in e){
+        if ('id' in e) {
           p.innerHTML += ` <span class="delete" onclick="deleteComment(${e.id})">delete</span>`
         }
         comments.appendChild(p);
       });
-      
+
     });
 }
 
@@ -123,13 +123,21 @@ const addComment = (e, id) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization' : `bearer ${window.sessionStorage.accessToken}`
+      'Authorization': `bearer ${window.sessionStorage.accessToken}`
     },
     body: JSON.stringify(data)
   })
     .then(response => response.json())
     .then(resdata => {
       console.log(resdata)
+      const comments = document.getElementById("comments")
+      if ('id' in resdata) {
+        console.log('ok')
+        let p = document.createElement('p');
+        p.innerHTML = `${resdata.name}:  ${resdata.comment}  `;
+        p.innerHTML += ` <span class="delete" onclick="deleteComment(${resdata.id})">delete</span>`
+        comments.appendChild(p);
+      }
     })
 }
 
@@ -138,7 +146,7 @@ const deleteComment = (id) => {
   fetch(`http://localhost:3000/api/comments/${id}/delete`, {
     method: 'POST',
     headers: {
-      'Authorization' : `bearer ${window.sessionStorage.accessToken}`
+      'Authorization': `bearer ${window.sessionStorage.accessToken}`
     },
   })
     .then(response => response.json())
