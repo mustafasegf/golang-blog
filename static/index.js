@@ -52,9 +52,10 @@ const loadComment = (id) => {
       }
       data.forEach(e => {
         let p = document.createElement('p');
-        p.innerHTML = e.name + e.comment;
+        p.innerHTML = `${e.name}:  ${e.comment}`;
         target.appendChild(p);
       });
+      
     });
 }
 
