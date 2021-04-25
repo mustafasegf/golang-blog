@@ -47,7 +47,8 @@ func (q *Queries) DeleteComment(ctx context.Context, id int32) error {
 }
 
 const getComment = `-- name: GetComment :many
-SELECT id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name FROM comments as c
+SELECT id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name 
+FROM comments as c
 WHERE c.blog_id = $1
 `
 
@@ -89,8 +90,9 @@ func (q *Queries) GetComment(ctx context.Context, blogID int32) ([]GetCommentRow
 }
 
 const getOneComment = `-- name: GetOneComment :one
-SELECT id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = c.user_id) FROM comments as c
-WHERE c.blog_id = $1
+SELECT id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name 
+FROM comments as c
+WHERE c.id = $1
 LIMIT 1
 `
 
@@ -99,18 +101,18 @@ type GetOneCommentRow struct {
 	BlogID  int32       `json:"blog_id"`
 	UserID  int32       `json:"user_id"`
 	Comment string      `json:"comment"`
-	Exists  interface{} `json:"exists"`
+	Name    interface{} `json:"name"`
 }
 
-func (q *Queries) GetOneComment(ctx context.Context, blogID int32) (GetOneCommentRow, error) {
-	row := q.db.QueryRowContext(ctx, getOneComment, blogID)
+func (q *Queries) GetOneComment(ctx context.Context, id int32) (GetOneCommentRow, error) {
+	row := q.db.QueryRowContext(ctx, getOneComment, id)
 	var i GetOneCommentRow
 	err := row.Scan(
 		&i.ID,
 		&i.BlogID,
 		&i.UserID,
 		&i.Comment,
-		&i.Exists,
+		&i.Name,
 	)
 	return i, err
 }

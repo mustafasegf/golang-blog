@@ -16,7 +16,7 @@ WHERE c.blog_id = $1;
 -- name: GetOneComment :one
 SELECT *, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name 
 FROM comments as c
-WHERE c.blog_id = $1
+WHERE c.id = $1
 LIMIT 1;
 
 -- name: UpdateComment :exec

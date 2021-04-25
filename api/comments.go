@@ -134,13 +134,13 @@ type deleteCommentId struct {
 }
 
 func (server *Server) deleteComment(ctx *gin.Context) {
-	var reqId deleteCommentId
-	if err := ctx.ShouldBindUri(&reqId); err != nil {
+	var req deleteCommentId
+	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
-	comment, err := server.store.GetOneComment(ctx, reqId.ID)
+	comment, err := server.store.GetOneComment(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -158,7 +158,7 @@ func (server *Server) deleteComment(ctx *gin.Context) {
 		return
 	}
 
-	err = server.store.DeleteComment(ctx, reqId.ID)
+	err = server.store.DeleteComment(ctx, req.ID)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
