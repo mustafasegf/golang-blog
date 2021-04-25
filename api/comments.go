@@ -14,7 +14,6 @@ import (
 type createCommentsRequest struct {
 	BlogID  int32  `uri:"id"`
 	Comment string `json:"comment" binding:"required"`
-	Token   string `json:"token" binding:"required"`
 }
 
 func (server *Server) createComment(ctx *gin.Context) {
@@ -80,7 +79,6 @@ func (server *Server) getComment(ctx *gin.Context) {
 type updateCommentRequest struct {
 	ID      int32  `uri:"id"`
 	Comment string `json:"comment" binding:"required"`
-	Token   string `json:"token" binding:"required"`
 }
 
 func (server *Server) updateComment(ctx *gin.Context) {
