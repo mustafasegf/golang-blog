@@ -47,7 +47,7 @@ func (q *Queries) DeleteComment(ctx context.Context, id int32) error {
 }
 
 const getComment = `-- name: GetComment :many
-SELECT id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = c.user_id) FROM comments as c
+SELECT id, blog_id, user_id, comment, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name FROM comments as c
 WHERE c.blog_id = $1
 `
 
@@ -56,7 +56,7 @@ type GetCommentRow struct {
 	BlogID  int32       `json:"blog_id"`
 	UserID  int32       `json:"user_id"`
 	Comment string      `json:"comment"`
-	Exists  interface{} `json:"exists"`
+	Name    interface{} `json:"name"`
 }
 
 func (q *Queries) GetComment(ctx context.Context, blogID int32) ([]GetCommentRow, error) {
@@ -73,7 +73,7 @@ func (q *Queries) GetComment(ctx context.Context, blogID int32) ([]GetCommentRow
 			&i.BlogID,
 			&i.UserID,
 			&i.Comment,
-			&i.Exists,
+			&i.Name,
 		); err != nil {
 			return nil, err
 		}

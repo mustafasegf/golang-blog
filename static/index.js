@@ -48,11 +48,11 @@ const loadComment = (id) => {
       comment.innerHTML = "Comments"
       target.appendChild(comment);
       if (data === null) {
-        data = [{ comment: 'none' }]
+        data = [{ comment: 'none', name: '' }]
       }
       data.forEach(e => {
         let p = document.createElement('p');
-        p.innerHTML = e.comment;
+        p.innerHTML = e.name + e.comment;
         target.appendChild(p);
       });
     });

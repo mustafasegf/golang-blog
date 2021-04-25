@@ -9,11 +9,13 @@ INSERT INTO comments (
 ) RETURNING *;
 
 -- name: GetComment :many
-SELECT *, (SELECT u.name from users as u WHERE u.id = c.user_id) FROM comments as c
+SELECT *, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name 
+FROM comments as c
 WHERE c.blog_id = $1;
 
 -- name: GetOneComment :one
-SELECT *, (SELECT u.name from users as u WHERE u.id = c.user_id) FROM comments as c
+SELECT *, (SELECT u.name from users as u WHERE u.id = c.user_id) AS name 
+FROM comments as c
 WHERE c.blog_id = $1
 LIMIT 1;
 
