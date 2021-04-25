@@ -27,13 +27,11 @@ const loadBlogById = (id) => {
     .then(response => response.json())
     .then(data => {
       console.log(data)
-      const target = document.getElementById("blog")
-      let div = document.createElement('div');
-      div.innerHTML += `
+      const target = document.getElementById("content")
+      target.innerHTML += `
       <h1>${data.title}</h1>
       <h3>${data.name}</h3>
       <p>${data.content}</p>`
-      target.appendChild(div);
 
       loadComment(id)
     });
@@ -43,10 +41,7 @@ const loadComment = (id) => {
     .then(response => response.json())
     .then(data => {
       console.log(data)
-      const target = document.getElementById("blog")
-      let comment = document.createElement('h3');
-      comment.innerHTML = "Comments"
-      target.appendChild(comment);
+      const comments = document.getElementById("comments")
       if (data === null) {
         data = [{ comment: 'none', name: '' }]
       }
@@ -56,7 +51,7 @@ const loadComment = (id) => {
         if('id' in e){
           p.innerHTML += ` <span class="delete" onclick="deleteComment(${e.id})">delete</span>`
         }
-        target.appendChild(p);
+        comments.appendChild(p);
       });
       
     });
