@@ -110,3 +110,26 @@ const login = (e) => {
       }
     })
 }
+
+const addComment = (e) => {
+  const form = document.getElementById("form")
+  e.preventDefault()
+  const formData = new FormData(form);
+  let data = {}
+  for (let key of formData.keys()) {
+    data[key] = formData.get(key);
+  }
+  console.log(data)
+  fetch(`${window.location.origin}/api${window.location.pathname}/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization' : `bearer ${window.sessionStorage.accessToken}`
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(resdata => {
+      console.log(resdata)
+    })
+}
