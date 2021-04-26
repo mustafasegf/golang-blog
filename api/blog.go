@@ -12,8 +12,8 @@ import (
 )
 
 type createBlogRequest struct {
-	Title    string `json:"title" binding:"required"`
-	Content  string `json:"content" binding:"required"`
+	Title   string `json:"title" binding:"required"`
+	Content string `json:"content" binding:"required"`
 }
 
 func (server *Server) createBlog(ctx *gin.Context) {
@@ -50,8 +50,6 @@ func (server *Server) createBlog(ctx *gin.Context) {
 type deleteBlogId struct {
 	ID int32 `uri:"id" binding:"required"`
 }
-
-
 
 func (server *Server) deleteBlog(ctx *gin.Context) {
 	var req deleteBlogId
