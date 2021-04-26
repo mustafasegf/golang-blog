@@ -51,23 +51,16 @@ type deleteBlogId struct {
 	ID int32 `uri:"id" binding:"required"`
 }
 
-type deleteTokenId struct {
-	Token string `json:"token" binding:"required"`
-}
+
 
 func (server *Server) deleteBlog(ctx *gin.Context) {
-	var reqId deleteBlogId
-	if err := ctx.ShouldBindUri(&reqId); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
-		return
-	}
-	var reqToken deleteTokenId
-	if err := ctx.ShouldBindJSON(&reqToken); err != nil {
+	var req deleteBlogId
+	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
-	blog, err := server.store.GetBlog(ctx, reqId.ID)
+	blog, err := server.store.GetBlog(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -84,7 +77,7 @@ func (server *Server) deleteBlog(ctx *gin.Context) {
 		return
 	}
 
-	err = server.store.DeleteBlog(ctx, reqId.ID)
+	err = server.store.DeleteBlog(ctx, req.ID)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
