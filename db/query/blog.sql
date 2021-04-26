@@ -5,7 +5,7 @@ INSERT INTO blogs (
   author_id
 ) VALUES (
   $1, $2, $3
-) RETURNING *;
+) RETURNING *, (SELECT u.name from users as u WHERE u.id = $3) AS name;
 
 -- name: GetBlog :one
 SELECT b.id, title, content, name, u.id as userid 

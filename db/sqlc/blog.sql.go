@@ -14,7 +14,7 @@ INSERT INTO blogs (
   author_id
 ) VALUES (
   $1, $2, $3
-) RETURNING id, title, content, author_id
+) RETURNING id, title, content, author_id, (SELECT u.name from users as u WHERE u.id = $3) AS name
 `
 
 type CreateBlogParams struct {
@@ -23,14 +23,23 @@ type CreateBlogParams struct {
 	AuthorID int32  `json:"author_id"`
 }
 
-func (q *Queries) CreateBlog(ctx context.Context, arg CreateBlogParams) (Blog, error) {
+type CreateBlogRow struct {
+	ID       int32       `json:"id"`
+	Title    string      `json:"title"`
+	Content  string      `json:"content"`
+	AuthorID int32       `json:"author_id"`
+	Name     interface{} `json:"name"`
+}
+
+func (q *Queries) CreateBlog(ctx context.Context, arg CreateBlogParams) (CreateBlogRow, error) {
 	row := q.db.QueryRowContext(ctx, createBlog, arg.Title, arg.Content, arg.AuthorID)
-	var i Blog
+	var i CreateBlogRow
 	err := row.Scan(
 		&i.ID,
 		&i.Title,
 		&i.Content,
 		&i.AuthorID,
+		&i.Name,
 	)
 	return i, err
 }

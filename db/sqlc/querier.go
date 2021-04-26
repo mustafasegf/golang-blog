@@ -7,7 +7,7 @@ import (
 )
 
 type Querier interface {
-	CreateBlog(ctx context.Context, arg CreateBlogParams) (Blog, error)
+	CreateBlog(ctx context.Context, arg CreateBlogParams) (CreateBlogRow, error)
 	CreateComment(ctx context.Context, arg CreateCommentParams) (CreateCommentRow, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteBlog(ctx context.Context, id int32) error
