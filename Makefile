@@ -31,4 +31,8 @@ build-win:
 
 watch:
 	air -c .air.conf
-.PHONY: pullpostgres postgres removecontainer createdb dropdb migrateup migratedown sqlc build-nix buiid-win watch
+
+swagger:
+	swag init --generalInfo main.go
+
+.PHONY: pullpostgres postgres removecontainer createdb dropdb migrateup migratedown sqlc build-nix buiid-win watch swagger

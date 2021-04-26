@@ -27,6 +27,8 @@ func main() {
 		log.Fatal("cannot create server:", err)
 	}
 
+	server.SwaggerRouter()
+
 	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("cannot start server:", err)

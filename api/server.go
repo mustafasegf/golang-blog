@@ -6,7 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 	db "github.com/mustafasegf/golang-blog/db/sqlc"
 	"github.com/mustafasegf/golang-blog/token"
-	"github.com/mustafasegf/golang-blog/util"
+	"github.com/mustafasegf/golang-blog/util"	
+
+	"github.com/mustafasegf/golang-blog/docs"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // Server serves HTTP requests for blog service.
@@ -39,7 +43,6 @@ func (server *Server) setupRouter() {
 	router.LoadHTMLGlob("templates/*")
 	router.Static("/static", "./static")
 
-	
 	router.GET("/", server.index)
 	router.GET("/register", server.register)
 	router.GET("/login", server.login)
@@ -74,4 +77,16 @@ func (server *Server) Start(address string) error {
 
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
+}
+
+func (server *Server) SwaggerRouter() {
+	// programatically set swagger info
+	docs.SwaggerInfo.Title = "API Payment"
+	docs.SwaggerInfo.Description = "Payment Application Programming Interface"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = server.config.ServerAddress
+	docs.SwaggerInfo.Schemes = []string{"http"}
+
+	// use ginSwagger middleware to serve the API docs
+	server.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
