@@ -29,11 +29,91 @@ const loadBlogById = (id) => {
       console.log(data)
       const target = document.getElementById("content")
       target.innerHTML += `
-      <h1>${data.title}</h1>
-      <h3>${data.name}</h3>
-      <p>${data.content}</p>`
+      <h1 id="title">${data.title}</h1>
+      <h3 id="author">Author: ${data.name}</h3>
+      <p id="content">${data.content}</p>
+      <p>
+        <span class="delete" onclick="deleteBlog(${id})">delete</span>
+        <span class="edit" onclick="editBlog(${id})">edit</span>
+      </p>`
       loadComment(id)
     });
+}
+
+const addBlog = (e) => {
+  const form = document.getElementById("form")
+  e.preventDefault()
+  const formData = new FormData(form);
+  let data = {}
+  for (let key of formData.keys()) {
+    data[key] = formData.get(key);
+  }
+  console.log(data)
+  fetch(`http://localhost:3000/api/blogs`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `bearer ${window.sessionStorage.accessToken}`
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(resdata => {
+      console.log(resdata)
+      const blog = document.getElementById("blog")
+      if ('title' in resdata) {
+        blog.innerHTML += `
+        <td>${resdata.title}</td>
+        <td>${resdata.content}</td>
+        <td>${resdata.name}</td>
+        <td><a href=http://localhost:3000/blogs/${resdata.id}>click here</a></td>`;
+      }
+    })
+}
+
+const editBlog = (id) => {
+  console.log(id)
+  const blog = document.getElementById("content").querySelector('#content')
+  const form = document.createElement("div")
+
+  form.innerHTML += `
+  <form action="" id="edit-blog-form" method="POST" onsubmit="fetchEditBlog(event, ${id});">
+    <label for="title"> title</label>
+    <input type="text" name="title" />
+    <label for="content"> content</label>
+    <input type="text" name="content" />
+    <input type="submit" name="submit" value="edit" />
+  </form>`
+  if (blog.querySelector('#edit-blog-form') !== null ) {
+    blog.querySelector('#edit-blog-form').remove()
+  } else {
+    blog.appendChild(form)
+  }
+}
+
+const fetchEditBlog = (e, id) => {
+  e.preventDefault()
+  const form = document.getElementById("edit-blog-form")
+  const formData = new FormData(form);
+  let data = {}
+  for (let key of formData.keys()) {
+    data[key] = formData.get(key);
+  }
+  console.log(data)
+  fetch(`http://localhost:3000/api/blogs/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `bearer ${window.sessionStorage.accessToken}`
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(resdata => {
+      console.log(resdata)
+      // const comment = document.getElementById("comments").querySelector(`#span-comment-${id}`)
+      // comment.innerHTML = data.comment
+    })
 }
 
 const loadComment = (id) => {
