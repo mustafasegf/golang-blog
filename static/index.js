@@ -3,21 +3,20 @@ const loadBlog = () => {
     .then(response => response.json())
     .then(data => {
       console.log(data)
-      const target = document.getElementById("blog")
-      target.innerHTML += `<tr>
-      <th>Title</th>
-      <th>Content</th>
-      <th>Author</th>
-      <th>url</th>
+      const blog = document.getElementById("blog")
+      blog.innerHTML += `<tr>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Author</th>
+        <th>url</th>
       </tr>`
       data.forEach(e => {
-        let tr = document.createElement('tr');
-        tr.innerHTML += `
-        <td>${e.title}</td>
-        <td>${e.content}</td>
-        <td>${e.name}</td>
-        <td><a href=http://localhost:3000/blogs/${e.id}>click here</a></td>`;
-        target.appendChild(tr);
+        blog.innerHTML += `<tr>
+          <td>${e.title}</td>
+          <td>${e.content}</td>
+          <td>${e.name}</td>
+          <td><a href=http://localhost:3000/blogs/${e.id}>click here</a></td>
+        <tr>`;
       });
     });
 }
