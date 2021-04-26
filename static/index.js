@@ -84,7 +84,7 @@ const editBlog = (id) => {
     <input type="text" name="content" />
     <input type="submit" name="submit" value="edit" />
   </form>`
-  if (blog.querySelector('#edit-blog-form') !== null ) {
+  if (blog.querySelector('#edit-blog-form') !== null) {
     blog.querySelector('#edit-blog-form').remove()
   } else {
     blog.appendChild(form)
@@ -111,8 +111,33 @@ const fetchEditBlog = (e, id) => {
     .then(response => response.json())
     .then(resdata => {
       console.log(resdata)
-      // const comment = document.getElementById("comments").querySelector(`#span-comment-${id}`)
-      // comment.innerHTML = data.comment
+      const blog = document.getElementById("content")
+      const title = blog.querySelector('#title')
+      const content = blog.querySelector('#content')
+      if (data.title !== '' && data.title !== undefined) {
+        title.innerHTML = data.title
+      } 
+      
+      if (data.content !== '' && data.content !== undefined) {
+        content.innerHTML = data.content
+      }
+    })
+}
+
+const deleteBlog = (id) => {
+  console.log(id)
+  fetch(`http://localhost:3000/api/blogs/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `bearer ${window.sessionStorage.accessToken}`
+    },
+  })
+    .then(response => response.json())
+    .then(resdata => {
+      console.log('data', resdata)
+      if ('Blog deleted' === resdata) {
+        window.location = '/'
+      }
     })
 }
 
@@ -251,7 +276,7 @@ const editComment = (id) => {
     <input type="text" name="comment" />
     <input type="submit" name="submit" value="edit" />
   </form>`
-  if (comment.querySelector('#edit-form') !== null ) {
+  if (comment.querySelector('#edit-form') !== null) {
     comment.querySelector('#edit-form').remove()
   } else {
     comment.appendChild(form)
