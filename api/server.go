@@ -81,8 +81,8 @@ func errorResponse(err error) gin.H {
 
 func (server *Server) SwaggerRouter() {
 	// programatically set swagger info
-	docs.SwaggerInfo.Title = "API Payment"
-	docs.SwaggerInfo.Description = "Payment Application Programming Interface"
+	docs.SwaggerInfo.Title = "Golang-blog project"
+	docs.SwaggerInfo.Description = "Simple golang blog for backend practice"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = server.config.ServerAddress
 	docs.SwaggerInfo.Schemes = []string{"http"}

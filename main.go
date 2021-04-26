@@ -10,6 +10,9 @@ import (
 	"github.com/mustafasegf/golang-blog/util"
 )
 
+// @title Golang-blog project
+// @version 1.0
+// @description Simple golang blog for backend practice
 func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
