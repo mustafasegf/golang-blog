@@ -116,8 +116,8 @@ const fetchEditBlog = (e, id) => {
       const content = blog.querySelector('#content')
       if (data.title !== '' && data.title !== undefined) {
         title.innerHTML = data.title
-      } 
-      
+      }
+
       if (data.content !== '' && data.content !== undefined) {
         content.innerHTML = data.content
       }
@@ -131,6 +131,7 @@ const deleteBlog = (id) => {
     headers: {
       'Authorization': `bearer ${window.sessionStorage.accessToken}`
     },
+    body: { id }
   })
     .then(response => response.json())
     .then(resdata => {
