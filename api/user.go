@@ -34,9 +34,7 @@ func newUserResponse(user db.User) userResponse {
 // @Tags user
 // @Accept  json
 // @Produce  json
-// @Param username body string true "username"
-// @Param password body string true "password"
-// @Param name body string true "name"
+// @Param register body createUserRequest true "register request"
 // @Success 200 {object} userResponse
 // @Router /api/users [post]
 func (server *Server) createUser(ctx *gin.Context) {
@@ -91,8 +89,7 @@ type loginUserResponse struct {
 // @Tags user
 // @Accept  json
 // @Produce  json
-// @Param username body string true "username"
-// @Param password body string true "password"
+// @Param login body loginUserRequest true "login request"
 // @Success 200 {object} loginUserResponse
 // @Router /api/users/login [post]
 func (server *Server) loginUser(ctx *gin.Context) {

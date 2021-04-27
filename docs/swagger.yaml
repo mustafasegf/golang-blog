@@ -9,6 +9,29 @@ definitions:
     - content
     - title
     type: object
+  api.createUserRequest:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+  api.loginUserRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
   api.loginUserResponse:
     properties:
       access_token:
@@ -307,24 +330,12 @@ paths:
       - application/json
       description: Create user by username, password and name
       parameters:
-      - description: username
+      - description: register request
         in: body
-        name: username
+        name: register
         required: true
         schema:
-          type: string
-      - description: password
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
-      - description: name
-        in: body
-        name: name
-        required: true
-        schema:
-          type: string
+          $ref: '#/definitions/api.createUserRequest'
       produces:
       - application/json
       responses:
@@ -341,18 +352,12 @@ paths:
       - application/json
       description: login user by username and password
       parameters:
-      - description: username
+      - description: login request
         in: body
-        name: username
+        name: login
         required: true
         schema:
-          type: string
-      - description: password
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
+          $ref: '#/definitions/api.loginUserRequest'
       produces:
       - application/json
       responses:
