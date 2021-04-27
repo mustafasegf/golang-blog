@@ -32,11 +32,11 @@ Simple golang blog for backend practice. This project created using gin and sqlc
 
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
-| DELETE | /api/api/blogs/{id} | [delete API blogs ID](#delete-api-blogs-id) | Delete a blog |
-| GET | /api/api/blogs | [get API blogs](#get-api-blogs) | Show all blog |
-| GET | /api/api/blogs/{id} | [get API blogs ID](#get-api-blogs-id) | Show a blog |
-| PATCH | /api/api/blogs/{id} | [patch API blogs ID](#patch-api-blogs-id) | Update a blog |
-| POST | /api/api/blogs/{id} | [post API blogs ID](#post-api-blogs-id) | Create a blog |
+| DELETE | /api/blogs/{id} | [delete API blogs ID](#delete-api-blogs-id) | Delete a blog |
+| GET | /api/blogs | [get API blogs](#get-api-blogs) | Show all blog |
+| GET | /api/blogs/{id} | [get API blogs ID](#get-api-blogs-id) | Show a blog |
+| PATCH | /api/blogs/{id} | [patch API blogs ID](#patch-api-blogs-id) | Update a blog |
+| POST | /api/blogs/{id} | [post API blogs ID](#post-api-blogs-id) | Create a blog |
   
 
 
@@ -44,10 +44,10 @@ Simple golang blog for backend practice. This project created using gin and sqlc
 
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
-| DELETE | /api/api/comments/{id} | [delete API comments ID](#delete-api-comments-id) | delete comment |
-| GET | /api/api/comments/{id} | [get API comments ID](#get-api-comments-id) | get all comment in blog |
-| PATCH | /api/api/comments/{id} | [patch API comments ID](#patch-api-comments-id) | update comment |
-| POST | /api/api/blogs/{id}/comments | [post API blogs ID comments](#post-api-blogs-id-comments) | Create a comment |
+| DELETE | /api/comments/{id} | [delete API comments ID](#delete-api-comments-id) | delete comment |
+| GET | /api/comments/{id} | [get API comments ID](#get-api-comments-id) | get all comment in blog |
+| PATCH | /api/comments/{id} | [patch API comments ID](#patch-api-comments-id) | update comment |
+| POST | /api/blogs/{id}/comments | [post API blogs ID comments](#post-api-blogs-id-comments) | Create a comment |
   
 
 
@@ -55,8 +55,8 @@ Simple golang blog for backend practice. This project created using gin and sqlc
 
 | Method  | URI     | Name   | Summary |
 |---------|---------|--------|---------|
-| POST | /api/api/users | [post API users](#post-api-users) | Create a user |
-| POST | /api/api/users/login | [post API users login](#post-api-users-login) | login a user |
+| POST | /api/users | [post API users](#post-api-users) | Create a user |
+| POST | /api/users/login | [post API users login](#post-api-users-login) | login a user |
   
 
 
@@ -65,7 +65,7 @@ Simple golang blog for backend practice. This project created using gin and sqlc
 ### <span id="delete-api-blogs-id"></span> Delete a blog (*DeleteAPIBlogsID*)
 
 ```
-DELETE /api/api/blogs/{id}
+DELETE /api/blogs/{id}
 ```
 
 Delete blog by id
@@ -99,7 +99,7 @@ Status: OK
 ### <span id="delete-api-comments-id"></span> delete comment (*DeleteAPICommentsID*)
 
 ```
-DELETE /api/api/comments/{id}
+DELETE /api/comments/{id}
 ```
 
 delete comment by comment id
@@ -137,7 +137,7 @@ Status: OK
 ### <span id="get-api-blogs"></span> Show all blog (*GetAPIBlogs*)
 
 ```
-GET /api/api/blogs
+GET /api/blogs
 ```
 
 get all blog in json
@@ -165,7 +165,7 @@ Status: OK
 ### <span id="get-api-blogs-id"></span> Show a blog (*GetAPIBlogsID*)
 
 ```
-GET /api/api/blogs/{id}
+GET /api/blogs/{id}
 ```
 
 get blog by id
@@ -202,7 +202,7 @@ Status: OK
 ### <span id="get-api-comments-id"></span> get all comment in blog (*GetAPICommentsID*)
 
 ```
-GET /api/api/comments/{id}
+GET /api/comments/{id}
 ```
 
 get all comment by blog id
@@ -240,7 +240,7 @@ Status: OK
 ### <span id="patch-api-blogs-id"></span> Update a blog (*PatchAPIBlogsID*)
 
 ```
-PATCH /api/api/blogs/{id}
+PATCH /api/blogs/{id}
 ```
 
 Update blog title and content
@@ -278,7 +278,7 @@ Status: OK
 ### <span id="patch-api-comments-id"></span> update comment (*PatchAPICommentsID*)
 
 ```
-PATCH /api/api/comments/{id}
+PATCH /api/comments/{id}
 ```
 
 update comment by comment id
@@ -317,7 +317,7 @@ Status: OK
 ### <span id="post-api-blogs-id"></span> Create a blog (*PostAPIBlogsID*)
 
 ```
-POST /api/api/blogs/{id}
+POST /api/blogs/{id}
 ```
 
 Create blog by title and content
@@ -355,7 +355,7 @@ Status: OK
 ### <span id="post-api-blogs-id-comments"></span> Create a comment (*PostAPIBlogsIDComments*)
 
 ```
-POST /api/api/blogs/{id}/comments
+POST /api/blogs/{id}/comments
 ```
 
 Create comment by id and comment
@@ -394,7 +394,7 @@ Status: OK
 ### <span id="post-api-users"></span> Create a user (*PostAPIUsers*)
 
 ```
-POST /api/api/users
+POST /api/users
 ```
 
 Create user by username, password and name
@@ -431,7 +431,7 @@ Status: OK
 ### <span id="post-api-users-login"></span> login a user (*PostAPIUsersLogin*)
 
 ```
-POST /api/api/users/login
+POST /api/users/login
 ```
 
 login user by username and password
