@@ -13,7 +13,6 @@ import (
 // @title Golang-blog project
 // @version 1.0
 // @description Simple golang blog for backend practice. This project created using gin and sqlc to generate type save code from sql queries.
-// @BasePath /api
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
