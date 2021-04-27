@@ -575,6 +575,13 @@ var doc = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
@@ -591,10 +598,10 @@ type swaggerInfo struct {
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "",
-	BasePath:    "",
+	BasePath:    "/api",
 	Schemes:     []string{},
 	Title:       "Golang-blog project",
-	Description: "Simple golang blog for backend practice",
+	Description: "Simple golang blog for backend practice. This project created using gin and sqlc to generate type save code from sql queries.",
 }
 
 type s struct{}

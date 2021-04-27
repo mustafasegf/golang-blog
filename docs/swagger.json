@@ -1,11 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Simple golang blog for backend practice",
+        "description": "Simple golang blog for backend practice. This project created using gin and sqlc to generate type save code from sql queries.",
         "title": "Golang-blog project",
         "contact": {},
         "version": "1.0"
     },
+    "basePath": "/api",
     "paths": {
         "/api/blogs": {
             "get": {
@@ -557,6 +558,13 @@
                     "type": "integer"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
