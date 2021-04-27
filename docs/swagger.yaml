@@ -12,6 +12,19 @@ definitions:
       title:
         type: string
     type: object
+  db.CreateCommentRow:
+    properties:
+      blog_id:
+        type: integer
+      comment:
+        type: string
+      id:
+        type: integer
+      name:
+        type: object
+      user_id:
+        type: integer
+    type: object
   db.GetBlogRow:
     properties:
       content:
@@ -158,4 +171,118 @@ paths:
       summary: Create a blog
       tags:
       - blog
+  /api/blogs/{id}/comments:
+    post:
+      consumes:
+      - application/json
+      description: Create comment by id and comment
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Comment content
+        in: body
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CreateCommentRow'
+      summary: Create a comment
+      tags:
+      - comment
+  /api/comments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete comment by comment id
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CreateCommentRow'
+      summary: delete comment
+      tags:
+      - comment
+    get:
+      consumes:
+      - application/json
+      description: get all comment by blog id
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CreateCommentRow'
+      summary: get all comment in blog
+      tags:
+      - comment
+    patch:
+      consumes:
+      - application/json
+      description: update comment by comment id
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Comment content
+        in: body
+        name: content
+        required: true
+        schema:
+          type: string
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CreateCommentRow'
+      summary: update comment
+      tags:
+      - comment
 swagger: "2.0"

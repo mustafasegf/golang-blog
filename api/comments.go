@@ -16,6 +16,17 @@ type createCommentsRequest struct {
 	Comment string `json:"comment" binding:"required"`
 }
 
+// createComment godoc
+// @Summary Create a comment
+// @Description Create comment by id and comment
+// @Tags comment
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Blog ID"
+// @Param content body string true "Comment content"
+// @Success 200 {object} db.CreateCommentRow
+// @Param Authorization header string true "Bearer Token"
+// @Router /api/blogs/{id}/comments [post]
 func (server *Server) createComment(ctx *gin.Context) {
 	var req createCommentsRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -55,6 +66,16 @@ type getCommentRequest struct {
 	ID int32 `uri:"id" binding:"required"`
 }
 
+// getComment godoc
+// @Summary get all comment in blog
+// @Description get all comment by blog id
+// @Tags comment
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Blog ID"
+// @Param Authorization header string true "Bearer Token"
+// @Success 200 {object} db.CreateCommentRow
+// @Router /api/comments/{id} [get]
 func (server *Server) getComment(ctx *gin.Context) {
 	var req getBlogRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -81,6 +102,17 @@ type updateCommentRequest struct {
 	Comment string `json:"comment" binding:"required"`
 }
 
+// updateComment godoc
+// @Summary update comment 
+// @Description update comment by comment id
+// @Tags comment
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Blog ID"
+// @Param content body string true "Comment content"
+// @Param Authorization header string true "Bearer Token"
+// @Success 200 {object} db.CreateCommentRow
+// @Router /api/comments/{id} [patch]
 func (server *Server) updateComment(ctx *gin.Context) {
 	var req updateCommentRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -133,6 +165,16 @@ type deleteCommentId struct {
 	ID int32 `uri:"id" binding:"required"`
 }
 
+// deleteComment godoc
+// @Summary delete comment 
+// @Description delete comment by comment id
+// @Tags comment
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Blog ID"
+// @Param Authorization header string true "Bearer Token"
+// @Success 200 {object} db.CreateCommentRow
+// @Router /api/comments/{id} [delete]
 func (server *Server) deleteComment(ctx *gin.Context) {
 	var req deleteCommentId
 	if err := ctx.ShouldBindUri(&req); err != nil {

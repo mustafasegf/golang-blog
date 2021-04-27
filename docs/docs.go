@@ -197,6 +197,176 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/api/blogs/{id}/comments": {
+            "post": {
+                "description": "Create comment by id and comment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "summary": "Create a comment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Blog ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Comment content",
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.CreateCommentRow"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comments/{id}": {
+            "get": {
+                "description": "get all comment by blog id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "summary": "get all comment in blog",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Blog ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.CreateCommentRow"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete comment by comment id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "summary": "delete comment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Blog ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.CreateCommentRow"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "update comment by comment id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "summary": "update comment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Blog ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Comment content",
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/db.CreateCommentRow"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -217,6 +387,26 @@ var doc = `{
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "db.CreateCommentRow": {
+            "type": "object",
+            "properties": {
+                "blog_id": {
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "object"
+                },
+                "user_id": {
+                    "type": "integer"
                 }
             }
         },
