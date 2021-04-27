@@ -1,4 +1,18 @@
 definitions:
+  api.loginUserResponse:
+    properties:
+      access_token:
+        type: string
+      user:
+        $ref: '#/definitions/api.userResponse'
+    type: object
+  api.userResponse:
+    properties:
+      name:
+        type: string
+      username:
+        type: string
+    type: object
   db.CreateBlogRow:
     properties:
       author_id:
@@ -285,4 +299,66 @@ paths:
       summary: update comment
       tags:
       - comment
+  /api/users:
+    post:
+      consumes:
+      - application/json
+      description: Create user by username, password and name
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      - description: name
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.userResponse'
+      summary: Create a user
+      tags:
+      - user
+  /api/users/login:
+    post:
+      consumes:
+      - application/json
+      description: login user by username and password
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.loginUserResponse'
+      summary: login a user
+      tags:
+      - user
 swagger: "2.0"
