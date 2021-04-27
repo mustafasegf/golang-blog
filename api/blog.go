@@ -23,8 +23,7 @@ type createBlogRequest struct {
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Blog ID"
-// @Param title body string false "Blog title"
-// @Param content body string false "Blog content"
+// @Param titleContent body createBlogRequest true "Blog request"
 // @Success 200 {object} db.CreateBlogRow
 // @Router /api/blogs/{id} [post]
 func (server *Server) createBlog(ctx *gin.Context) {
@@ -123,8 +122,7 @@ type updateBlogRequest struct {
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Blog ID"
-// @Param title body string false "Blog title"
-// @Param content body string false "Blog content"
+// @Param titleContent body createBlogRequest true "Blog request"
 // @Success 200 {string} string "Blog Updated"
 // @Router /api/blogs/{id} [patch]
 func (server *Server) updateBlog(ctx *gin.Context) {

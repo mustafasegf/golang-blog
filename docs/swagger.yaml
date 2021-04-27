@@ -1,4 +1,14 @@
 definitions:
+  api.createBlogRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    required:
+    - content
+    - title
+    type: object
   api.loginUserResponse:
     properties:
       access_token:
@@ -135,16 +145,12 @@ paths:
         name: id
         required: true
         type: integer
-      - description: Blog title
+      - description: Blog request
         in: body
-        name: title
+        name: titleContent
+        required: true
         schema:
-          type: string
-      - description: Blog content
-        in: body
-        name: content
-        schema:
-          type: string
+          $ref: '#/definitions/api.createBlogRequest'
       produces:
       - application/json
       responses:
@@ -165,16 +171,12 @@ paths:
         name: id
         required: true
         type: integer
-      - description: Blog title
+      - description: Blog request
         in: body
-        name: title
+        name: titleContent
+        required: true
         schema:
-          type: string
-      - description: Blog content
-        in: body
-        name: content
-        schema:
-          type: string
+          $ref: '#/definitions/api.createBlogRequest'
       produces:
       - application/json
       responses:

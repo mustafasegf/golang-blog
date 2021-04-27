@@ -99,19 +99,12 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "Blog title",
-                        "name": "title",
+                        "description": "Blog request",
+                        "name": "titleContent",
                         "in": "body",
+                        "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Blog content",
-                        "name": "content",
-                        "in": "body",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/api.createBlogRequest"
                         }
                     }
                 ],
@@ -172,19 +165,12 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "Blog title",
-                        "name": "title",
+                        "description": "Blog request",
+                        "name": "titleContent",
                         "in": "body",
+                        "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "Blog content",
-                        "name": "content",
-                        "in": "body",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/api.createBlogRequest"
                         }
                     }
                 ],
@@ -465,6 +451,21 @@ var doc = `{
         }
     },
     "definitions": {
+        "api.createBlogRequest": {
+            "type": "object",
+            "required": [
+                "content",
+                "title"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "api.loginUserResponse": {
             "type": "object",
             "properties": {
