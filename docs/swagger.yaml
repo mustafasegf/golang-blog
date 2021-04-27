@@ -1,0 +1,161 @@
+definitions:
+  db.CreateBlogRow:
+    properties:
+      author_id:
+        type: integer
+      content:
+        type: string
+      id:
+        type: integer
+      name:
+        type: object
+      title:
+        type: string
+    type: object
+  db.GetBlogRow:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      title:
+        type: string
+      userid:
+        type: integer
+    type: object
+  db.ListBlogRow:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      title:
+        type: string
+      userid:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: Simple golang blog for backend practice
+  title: Golang-blog project
+  version: "1.0"
+paths:
+  /api/blogs:
+    get:
+      description: get all blog in json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/db.ListBlogRow'
+            type: array
+      summary: Show all blog
+      tags:
+      - blog
+  /api/blogs/{id}:
+    delete:
+      description: Delete blog by id
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog deleted
+          schema:
+            type: string
+      summary: Delete a blog
+      tags:
+      - blog
+    get:
+      consumes:
+      - application/json
+      description: get blog by id
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.GetBlogRow'
+      summary: Show a blog
+      tags:
+      - blog
+    patch:
+      consumes:
+      - application/json
+      description: Update blog title and content
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Blog title
+        in: body
+        name: title
+        schema:
+          type: string
+      - description: Blog content
+        in: body
+        name: content
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Blog Updated
+          schema:
+            type: string
+      summary: Update a blog
+      tags:
+      - blog
+    post:
+      consumes:
+      - application/json
+      description: Create blog by title and content
+      parameters:
+      - description: Blog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Blog title
+        in: body
+        name: title
+        schema:
+          type: string
+      - description: Blog content
+        in: body
+        name: content
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/db.CreateBlogRow'
+      summary: Create a blog
+      tags:
+      - blog
+swagger: "2.0"
