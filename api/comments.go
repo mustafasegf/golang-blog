@@ -46,7 +46,7 @@ func (server *Server) createComment(ctx *gin.Context) {
 		Comment: req.Comment,
 	}
 
-	comment, err := server.store.CreateComment(ctx, arg)
+	comment, err := server.query.CreateComment(ctx, arg)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
@@ -83,7 +83,7 @@ func (server *Server) getComment(ctx *gin.Context) {
 		return
 	}
 
-	comment, err := server.store.GetComment(ctx, req.ID)
+	comment, err := server.query.GetComment(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -103,7 +103,7 @@ type updateCommentRequest struct {
 }
 
 // updateComment godoc
-// @Summary update comment 
+// @Summary update comment
 // @Description update comment by comment id
 // @Tags comment
 // @Accept  json
@@ -124,7 +124,7 @@ func (server *Server) updateComment(ctx *gin.Context) {
 		return
 	}
 
-	comment, err := server.store.GetOneComment(ctx, req.ID)
+	comment, err := server.query.GetOneComment(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -145,7 +145,7 @@ func (server *Server) updateComment(ctx *gin.Context) {
 		ID:      req.ID,
 		Comment: req.Comment,
 	}
-	err = server.store.UpdateComment(ctx, arg)
+	err = server.query.UpdateComment(ctx, arg)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
@@ -166,7 +166,7 @@ type deleteCommentId struct {
 }
 
 // deleteComment godoc
-// @Summary delete comment 
+// @Summary delete comment
 // @Description delete comment by comment id
 // @Tags comment
 // @Accept  json
@@ -182,7 +182,7 @@ func (server *Server) deleteComment(ctx *gin.Context) {
 		return
 	}
 
-	comment, err := server.store.GetOneComment(ctx, req.ID)
+	comment, err := server.query.GetOneComment(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -200,7 +200,7 @@ func (server *Server) deleteComment(ctx *gin.Context) {
 		return
 	}
 
-	err = server.store.DeleteComment(ctx, req.ID)
+	err = server.query.DeleteComment(ctx, req.ID)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {

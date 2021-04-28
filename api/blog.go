@@ -41,7 +41,7 @@ func (server *Server) createBlog(ctx *gin.Context) {
 		AuthorID: authPayload.UserId,
 	}
 
-	blog, err := server.store.CreateBlog(ctx, arg)
+	blog, err := server.query.CreateBlog(ctx, arg)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
@@ -76,7 +76,7 @@ func (server *Server) deleteBlog(ctx *gin.Context) {
 		return
 	}
 
-	blog, err := server.store.GetBlog(ctx, req.ID)
+	blog, err := server.query.GetBlog(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -93,7 +93,7 @@ func (server *Server) deleteBlog(ctx *gin.Context) {
 		return
 	}
 
-	err = server.store.DeleteBlog(ctx, req.ID)
+	err = server.query.DeleteBlog(ctx, req.ID)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
@@ -137,7 +137,7 @@ func (server *Server) updateBlog(ctx *gin.Context) {
 		return
 	}
 
-	blog, err := server.store.GetBlog(ctx, req.ID)
+	blog, err := server.query.GetBlog(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -160,19 +160,19 @@ func (server *Server) updateBlog(ctx *gin.Context) {
 			Title:   req.Title,
 			Content: req.Content,
 		}
-		err = server.store.UpdateBlog(ctx, arg)
+		err = server.query.UpdateBlog(ctx, arg)
 	} else if req.Title != "" {
 		arg := db.UpdateBlogTitleParams{
 			ID:    req.ID,
 			Title: req.Title,
 		}
-		err = server.store.UpdateBlogTitle(ctx, arg)
+		err = server.query.UpdateBlogTitle(ctx, arg)
 	} else if req.Content != "" {
 		arg := db.UpdateBlogContentParams{
 			ID:      req.ID,
 			Content: req.Content,
 		}
-		err = server.store.UpdateBlogContent(ctx, arg)
+		err = server.query.UpdateBlogContent(ctx, arg)
 	} else {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
@@ -212,7 +212,7 @@ func (server *Server) getBlog(ctx *gin.Context) {
 		return
 	}
 
-	blog, err := server.store.GetBlog(ctx, req.ID)
+	blog, err := server.query.GetBlog(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusUnauthorized, errorResponse(err))
@@ -234,7 +234,7 @@ func (server *Server) getBlog(ctx *gin.Context) {
 // @Success 200 {object} []db.ListBlogRow
 // @Router /api/blogs [get]
 func (server *Server) listBlog(ctx *gin.Context) {
-	blog, err := server.store.ListBlog(ctx)
+	blog, err := server.query.ListBlog(ctx)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))

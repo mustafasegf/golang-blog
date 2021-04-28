@@ -56,7 +56,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 		Name:     req.Name,
 	}
 
-	user, err := server.store.CreateUser(ctx, arg)
+	user, err := server.query.CreateUser(ctx, arg)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
@@ -99,7 +99,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	user, err := server.store.GetUser(ctx, req.Username)
+	user, err := server.query.GetUser(ctx, req.Username)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	db "github.com/mustafasegf/golang-blog/db/sqlc"
 	"github.com/mustafasegf/golang-blog/token"
-	"github.com/mustafasegf/golang-blog/util"	
+	"github.com/mustafasegf/golang-blog/util"
 
 	"github.com/mustafasegf/golang-blog/docs"
 	swaggerFiles "github.com/swaggo/files"
@@ -18,11 +18,11 @@ type Server struct {
 	config     util.Config
 	tokenMaker token.Maker
 	router     *gin.Engine
-	store      db.Store
+	query    db.Querier
 }
 
 // NewServer creates a new HTTP server and set up routing.
-func NewServer(config util.Config, store db.Store) (*Server, error) {
+func NewServer(config util.Config, querier db.Querier) (*Server, error) {
 	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
 	if err != nil {
 		return nil, fmt.Errorf("cannot create token maker: %w", err)
@@ -31,7 +31,7 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 	server := &Server{
 		config:     config,
 		tokenMaker: tokenMaker,
-		store:      store,
+		query:    querier,
 	}
 
 	server.setupRouter()
